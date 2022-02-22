@@ -26,10 +26,9 @@ jobs:
       - run: flutter upgrade
       - run: flutter pub get
       - run: flutter build apk --debug --split-per-abi
-      - run: flutter build appbundle
       - name: Push to Releases
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/app/outputs/apk/debug/*,build/ios/iphoneos/app.ipa"
+          artifacts: "build/app/outputs/apk/debug/*"
           tag: v0.1.${{ github.run_number }}
           token: ${{ secrets.TOKEN }}

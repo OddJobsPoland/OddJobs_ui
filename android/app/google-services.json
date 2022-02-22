@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "852126047148",
+    "project_id": "easy-jobs-ff4ae",
+    "storage_bucket": "easy-jobs-ff4ae.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:852126047148:android:cd28de94badadfee99f809",
+        "android_client_info": {
+          "package_name": "com.example.jobs_ui"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "852126047148-bgf7prig0ig2vute0gefl8nu7l5ndeur.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.jobs_ui",
+            "certificate_hash": "c6cff0cb5395700e53f722c7bf6233da76ce3014"
+          }
+        },
+        {
+          "client_id": "852126047148-mgv95rk76cl5ir548uqtn2k3fg60e9mv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC26FXfmjLbA0UfNg3Pf2r5kApYdVH6I6Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "852126047148-mgv95rk76cl5ir548uqtn2k3fg60e9mv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

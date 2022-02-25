@@ -18,6 +18,8 @@ class _MainIntroState extends State<MainIntro> {
   SharedPreferences? _sharedPreferneces;
   bool isIntroDone = false;
 
+  //ASYNC
+
   _MainIntroState() {
     getSharedPreferences()
         .then((val) => setState(() {
@@ -34,9 +36,11 @@ class _MainIntroState extends State<MainIntro> {
 
   Future<bool?> getIntroDoneValue() async {
     return _sharedPreferneces!.getBool('IntroDone') == null
-        ? await _sharedPreferneces!.setBool('IntroDone', false)
+        ? await _sharedPreferneces!.setBool('IntroDone', true)
         : _sharedPreferneces!.getBool('IntroDone');
   }
+
+  //END ASYNC
 
   @override
   void initState() {
@@ -45,7 +49,7 @@ class _MainIntroState extends State<MainIntro> {
 
   @override
   Widget build(BuildContext context) {
-    var _value;
+    var _choiceChipValue;
     PersistentTabController _controller;
     _controller = PersistentTabController(initialIndex: 1);
 
@@ -58,20 +62,20 @@ class _MainIntroState extends State<MainIntro> {
         PersistentBottomNavBarItem(
           icon: Icon(Icons.emoji_people),
           title: ("Konto"),
-          activeColorPrimary: Colors.greenAccent,
-          inactiveColorPrimary: CupertinoColors.systemGrey,
+          activeColorPrimary: Colors.amber,
+          inactiveColorPrimary: Color.fromARGB(255, 77, 201, 141),
         ),
         PersistentBottomNavBarItem(
           icon: Icon(Icons.auto_awesome_motion_outlined),
           title: ("Oferty"),
-          activeColorPrimary: Colors.greenAccent,
-          inactiveColorPrimary: CupertinoColors.systemGrey,
+          activeColorPrimary: Colors.amber,
+          inactiveColorPrimary: Color.fromARGB(255, 77, 201, 141),
         ),
         PersistentBottomNavBarItem(
           icon: Icon(Icons.forum_rounded),
           title: ("Czaty"),
-          activeColorPrimary: Colors.greenAccent,
-          inactiveColorPrimary: CupertinoColors.systemGrey,
+          activeColorPrimary: Colors.amber,
+          inactiveColorPrimary: Color.fromARGB(255, 77, 201, 141),
         ),
       ];
     }
@@ -81,8 +85,9 @@ class _MainIntroState extends State<MainIntro> {
     List<PageViewModel> _introScreenPages() {
       return [
         PageViewModel(
-          title: "Witaj w {app_name}!",
-          body: "Pomożemy Ci znaleźć pracę marzeń już w 3 dni!",
+          title: "Witaj w OddJobs!",
+          body:
+              "Pomożemy Ci znaleźć pracę marzeń już w 3 dni! Jesteśmy agregatem ofert pracy dla niebieskich kołnierzyków, zajęć typowo miejskich. Zależny nam na tym, żeby udało Ci się znaleźć pracę jak najszybciej, więc pracodawca jest zobligowany odpowiedzieć na twoją aplikację w max 3 dni i możliwe, że zaprosić Cię na rozmowę😏",
           image: Image.asset("assets/sitting-1@2x.png"),
         ),
         PageViewModel(
@@ -100,7 +105,7 @@ class _MainIntroState extends State<MainIntro> {
             TextField(
               decoration: InputDecoration(
                 labelText: 'Jak się nazywasz',
-                labelStyle: TextStyle(color: Colors.green),
+                labelStyle: TextStyle(color: Colors.blueGrey),
                 focusColor: Colors.green,
                 border: OutlineInputBorder(),
                 enabledBorder: OutlineInputBorder(
@@ -127,7 +132,7 @@ class _MainIntroState extends State<MainIntro> {
             TextField(
               decoration: InputDecoration(
                 labelText: 'Numer telefonu',
-                labelStyle: TextStyle(color: Colors.green),
+                labelStyle: TextStyle(color: Colors.blueGrey),
                 focusColor: Colors.green,
                 border: OutlineInputBorder(),
                 enabledBorder: OutlineInputBorder(
@@ -191,7 +196,7 @@ class _MainIntroState extends State<MainIntro> {
             TextField(
               decoration: InputDecoration(
                 labelText: 'Adres zamieszkania',
-                labelStyle: TextStyle(color: Colors.green),
+                labelStyle: TextStyle(color: Colors.blueGrey),
                 focusColor: Colors.green,
                 border: OutlineInputBorder(),
                 enabledBorder: OutlineInputBorder(
@@ -218,7 +223,7 @@ class _MainIntroState extends State<MainIntro> {
             TextField(
               decoration: InputDecoration(
                 labelText: 'Data urodzin',
-                labelStyle: TextStyle(color: Colors.green),
+                labelStyle: TextStyle(color: Colors.blueGrey),
                 focusColor: Colors.green,
                 border: OutlineInputBorder(),
                 enabledBorder: OutlineInputBorder(
@@ -260,10 +265,10 @@ class _MainIntroState extends State<MainIntro> {
                   (int idx) {
                     return ChoiceChip(
                         label: Text(options[idx]),
-                        selected: _value == idx,
+                        selected: _choiceChipValue == idx,
                         onSelected: (bool selected) {
                           setState(() {
-                            _value = selected ? idx : null;
+                            _choiceChipValue = selected ? idx : null;
                           });
                         });
                   },
@@ -292,7 +297,7 @@ class _MainIntroState extends State<MainIntro> {
                 children: [
                   Icon(FontAwesomeIcons.twitter, size: 20.0),
                   Text(
-                    " @{app_name}",
+                    " @OddJobs",
                     style: TextStyle(fontSize: 20),
                     textAlign: TextAlign.center,
                   ),
@@ -345,6 +350,7 @@ class _MainIntroState extends State<MainIntro> {
     }
 
     Future<void> _onIntroEnd(context) async {
+      await _sharedPreferneces!.setBool('IntroDone', false);
       Navigator.of(context).push(
         MaterialPageRoute(builder: (_) => _tabView()),
       );

@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:introduction_screen/introduction_screen.dart';
@@ -17,6 +17,11 @@ class MainIntro extends StatefulWidget {
 class _MainIntroState extends State<MainIntro> {
   SharedPreferences? _sharedPreferneces;
   bool isIntroDone = false;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  Map<String, dynamic> userAttributes = Map<String, dynamic>();
+  List<String> citiesAvailable = [];
+  List<String> selectedChoices = [];
+  String dropdownValue = "Warszawa";
 
   //ASYNC
 
@@ -27,6 +32,14 @@ class _MainIntroState extends State<MainIntro> {
             }))
         .then((value) => getIntroDoneValue().then((val) => setState(() {
               isIntroDone = val!;
+            })))
+        .then((value) =>
+            readAvailableUserAttributes().then((value) => setState(() {
+                  userAttributes = value;
+                })))
+        .then((value) => readAvailableCities().then((value) => setState(() {
+              citiesAvailable =
+                  value.entries.map((e) => e.value.toString()).toList();
             })));
   }
 
@@ -49,7 +62,6 @@ class _MainIntroState extends State<MainIntro> {
 
   @override
   Widget build(BuildContext context) {
-    var _choiceChipValue;
     PersistentTabController _controller;
     _controller = PersistentTabController(initialIndex: 1);
 
@@ -79,8 +91,6 @@ class _MainIntroState extends State<MainIntro> {
         ),
       ];
     }
-
-    List<String> options = ['wózki widłowe', 'sanepid', 'ketegoria b'];
 
     List<PageViewModel> _introScreenPages() {
       return [
@@ -156,38 +166,44 @@ class _MainIntroState extends State<MainIntro> {
               width: 1,
               height: 28,
             ),
-            DropdownButton<String>(
-              value: "Warszawa",
-              borderRadius: BorderRadius.horizontal(
-                  left: Radius.circular(30), right: Radius.circular(30)),
-              isExpanded: true,
-              alignment: AlignmentDirectional.centerStart,
-              elevation: 16,
-              style: const TextStyle(color: Colors.green),
-              underline: Container(
-                height: 0,
-                color: Colors.greenAccent,
+            Container(
+              width: MediaQuery.of(context).size.width * 0.95,
+              padding: EdgeInsets.symmetric(horizontal: 10.0),
+              decoration: ShapeDecoration(
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(
+                      width: 2.0,
+                      style: BorderStyle.solid,
+                      color: Colors.greenAccent),
+                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                ),
               ),
-              onChanged: (String? newValue) {
-                // setState(() {
-                //   dropdownValue = newValue!;
-                // });
-              },
-              items: <String>[
-                'Warszawa',
-                'Poznań',
-                'Wrocław',
-                'Gdańsk',
-                'Kraków',
-                'Białystok',
-                'Katowice',
-                'Rzeszów'
-              ].map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
+              child: DropdownButton<String>(
+                value: dropdownValue,
+                borderRadius: BorderRadius.horizontal(
+                    left: Radius.circular(10), right: Radius.circular(10)),
+                isExpanded: true,
+                alignment: AlignmentDirectional.centerStart,
+                elevation: 16,
+                //style: const TextStyle(fontWeight: FontWeight.bold),
+                underline: Container(
+                  height: 0,
+                  color: Colors.greenAccent,
+                ),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    dropdownValue = newValue == null ? "Poznań" : newValue;
+                  });
+                },
+                items: citiesAvailable.map(
+                  (val) {
+                    return DropdownMenuItem<String>(
+                      value: val.toString(),
+                      child: Text(val),
+                    );
+                  },
+                ).toList(),
+              ),
             ),
             SizedBox(
               width: 1,
@@ -261,16 +277,34 @@ class _MainIntroState extends State<MainIntro> {
               ),
               Wrap(
                 children: List<Widget>.generate(
-                  options.length,
+                  userAttributes.length,
                   (int idx) {
-                    return ChoiceChip(
-                        label: Text(options[idx]),
-                        selected: _choiceChipValue == idx,
-                        onSelected: (bool selected) {
-                          setState(() {
-                            _choiceChipValue = selected ? idx : null;
-                          });
-                        });
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: ChoiceChip(
+                          selected: selectedChoices.contains(
+                              userAttributes["${idx + 1}"].toString()),
+                          label: Text(userAttributes["${idx + 1}"].toString()),
+                          selectedColor: Colors.greenAccent.shade100,
+                          shadowColor: Colors.teal,
+                          backgroundColor: Colors.white,
+                          side: BorderSide(
+                              color: Colors.greenAccent.shade100, width: 1.8),
+                          elevation: 4,
+                          pressElevation: 0.1,
+                          onSelected: (bool selected) {
+                            setState(() {
+                              print(selectedChoices);
+                              print(selected);
+                              selectedChoices.contains(
+                                      userAttributes["${idx + 1}"].toString())
+                                  ? selectedChoices.remove(
+                                      userAttributes["${idx + 1}"].toString())
+                                  : selectedChoices
+                                      .add(userAttributes["${idx + 1}"]);
+                            });
+                          }),
+                    );
                   },
                 ).toList(),
               ),
@@ -383,5 +417,25 @@ class _MainIntroState extends State<MainIntro> {
                 activeShape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25.0))),
           );
+  }
+
+  Future<Map<String, dynamic>> readAvailableUserAttributes() async {
+    var collection = FirebaseFirestore.instance.collection('UserAttributes');
+    var docSnapshot = await collection.doc('ListOfUserAttribues').get();
+    if (docSnapshot.exists) {
+      Map<String, dynamic> data = docSnapshot.data()!;
+      return data;
+    }
+    return Map<String, dynamic>();
+  }
+
+  Future<Map<String, dynamic>> readAvailableCities() async {
+    var collection = FirebaseFirestore.instance.collection('AppAttributes');
+    var docSnapshot = await collection.doc('CitiesAvailable').get();
+    if (docSnapshot.exists) {
+      Map<String, dynamic> data = docSnapshot.data()!;
+      return data;
+    }
+    return Map<String, dynamic>();
   }
 }

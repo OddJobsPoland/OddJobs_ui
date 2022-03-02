@@ -441,6 +441,8 @@ class _userState extends State<user> {
                                     BorderRadius.all(new Radius.circular(30)),
                                 side: BorderSide(color: Colors.greenAccent)))),
                     onPressed: () {
+                      //Add removing intro done flag
+                      basicUserData()?.delete();
                       debugPrint('Usunięto konto');
                     },
                     child: Text(
@@ -460,7 +462,11 @@ class _userState extends State<user> {
 
   User? basicUserData() {
     final User? user = FirebaseAuth.instance.currentUser;
-    final uid = user?.uid;
+    print(user?.uid);
+    print(user?.providerData);
+    print(user?.tenantId);
+    print(user?.hashCode);
+    print(user?.runtimeType);
     return user; // here you write the codes to input the data into firestore
   }
 }

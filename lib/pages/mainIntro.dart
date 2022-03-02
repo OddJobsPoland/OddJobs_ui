@@ -5,6 +5,7 @@ import 'package:introduction_screen/introduction_screen.dart';
 import 'package:jobs_ui/pages/user.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:form_validator/form_validator.dart';
 import 'home.dart';
 
 class MainIntro extends StatefulWidget {
@@ -92,6 +93,7 @@ class _MainIntroState extends State<MainIntro> {
       ];
     }
 
+    ValidationBuilder.setLocale('pl');
     List<PageViewModel> _introScreenPages() {
       return [
         PageViewModel(
@@ -112,7 +114,9 @@ class _MainIntroState extends State<MainIntro> {
               width: 1,
               height: 26,
             ),
-            TextField(
+            TextFormField(
+              autovalidateMode: AutovalidateMode.always,
+              validator: ValidationBuilder().minLength(5).maxLength(40).build(),
               decoration: InputDecoration(
                 labelText: 'Jak się nazywasz',
                 labelStyle: TextStyle(color: Colors.blueGrey),
@@ -139,7 +143,9 @@ class _MainIntroState extends State<MainIntro> {
               width: 1,
               height: 28,
             ),
-            TextField(
+            TextFormField(
+              autovalidateMode: AutovalidateMode.always,
+              validator: ValidationBuilder().phone().maxLength(13).build(),
               decoration: InputDecoration(
                 labelText: 'Numer telefonu',
                 labelStyle: TextStyle(color: Colors.blueGrey),
@@ -155,7 +161,7 @@ class _MainIntroState extends State<MainIntro> {
                 floatingLabelBehavior: FloatingLabelBehavior.always,
               ),
               textInputAction: TextInputAction.next,
-              keyboardType: TextInputType.text,
+              keyboardType: TextInputType.phone,
               style: TextStyle(fontWeight: FontWeight.bold),
               showCursor: true,
               cursorColor: Colors.amber,
@@ -209,9 +215,12 @@ class _MainIntroState extends State<MainIntro> {
               width: 1,
               height: 28,
             ),
-            TextField(
+            TextFormField(
+              autovalidateMode: AutovalidateMode.always,
+              validator: ValidationBuilder().minLength(4).maxLength(60).build(),
               decoration: InputDecoration(
                 labelText: 'Adres zamieszkania',
+                hintText: 'Ulica i numer',
                 labelStyle: TextStyle(color: Colors.blueGrey),
                 focusColor: Colors.green,
                 border: OutlineInputBorder(),
@@ -236,9 +245,17 @@ class _MainIntroState extends State<MainIntro> {
               width: 1,
               height: 28,
             ),
-            TextField(
+            TextFormField(
+              autovalidateMode: AutovalidateMode.always,
+              validator: ValidationBuilder()
+                  .regExp(
+                      RegExp(
+                          r"^([0-2][0-9]|(3)[0-1])(\.)(((0)[0-9])|((1)[0-2]))(\.)\d{4}$"),
+                      "Podaj poprawną datę urodzin np. 25.08.1999")
+                  .build(),
               decoration: InputDecoration(
                 labelText: 'Data urodzin',
+                hintText: "DD.MM.RRRR",
                 labelStyle: TextStyle(color: Colors.blueGrey),
                 focusColor: Colors.green,
                 border: OutlineInputBorder(),
@@ -252,7 +269,7 @@ class _MainIntroState extends State<MainIntro> {
                 floatingLabelBehavior: FloatingLabelBehavior.always,
               ),
               textInputAction: TextInputAction.done,
-              keyboardType: TextInputType.text,
+              keyboardType: TextInputType.datetime,
               style: TextStyle(fontWeight: FontWeight.bold),
               showCursor: true,
               cursorColor: Colors.amber,

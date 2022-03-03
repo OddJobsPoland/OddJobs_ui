@@ -15,6 +15,14 @@ Future<void> main() async {
   runApp(MaterialApp(
     home: MyApp(),
     title: 'OddJobs',
+    themeMode: ThemeMode.light,
+    locale: Locale('pl', 'EU'),
+    //debugShowMaterialGrid: true,
+    //showPerformanceOverlay: true,
+    //checkerboardRasterCacheImages: true,
+    //checkerboardOffscreenLayers: true,
+    //showSemanticsDebugger: true,
+    debugShowCheckedModeBanner: false,
   ));
 }
 

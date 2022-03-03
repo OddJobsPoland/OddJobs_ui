@@ -441,10 +441,64 @@ class _userState extends State<user> {
                                     BorderRadius.all(new Radius.circular(30)),
                                 side: BorderSide(color: Colors.greenAccent)))),
                     onPressed: () {
+                      //Add removing intro done flag
+                      basicUserData()?.delete();
                       debugPrint('Usunięto konto');
                     },
                     child: Text(
                       "Usuń konto",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
+                  ),
+                ),
+                Center(
+                  child: OutlinedButton(
+                    style: ButtonStyle(
+                        minimumSize:
+                            MaterialStateProperty.all<Size?>(Size(128.0, 40.0)),
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(Colors.blueAccent),
+                        side: MaterialStateProperty.all<BorderSide>(
+                            BorderSide(width: 1.3, color: Colors.blueAccent)),
+                        shape: MaterialStateProperty
+                            .all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(new Radius.circular(30)),
+                                side: BorderSide(color: Colors.greenAccent)))),
+                    onPressed: () {
+                      //Add removing intro done flag
+                      showLicensePage(context: context);
+                      debugPrint('Showing licences');
+                    },
+                    child: Text(
+                      "Licencje",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
+                  ),
+                ),
+                Center(
+                  child: OutlinedButton(
+                    style: ButtonStyle(
+                        minimumSize:
+                            MaterialStateProperty.all<Size?>(Size(128.0, 40.0)),
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(Colors.blueAccent),
+                        side: MaterialStateProperty.all<BorderSide>(
+                            BorderSide(width: 1.3, color: Colors.blueAccent)),
+                        shape: MaterialStateProperty
+                            .all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(new Radius.circular(30)),
+                                side: BorderSide(color: Colors.greenAccent)))),
+                    onPressed: () {
+                      //Add removing intro done flag
+                      showAboutDialog(context: context);
+                      debugPrint('Showing abouts');
+                    },
+                    child: Text(
+                      "O aplikacji",
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                     ),
@@ -460,7 +514,11 @@ class _userState extends State<user> {
 
   User? basicUserData() {
     final User? user = FirebaseAuth.instance.currentUser;
-    final uid = user?.uid;
+    print(user?.uid);
+    print(user?.providerData);
+    print(user?.tenantId);
+    print(user?.hashCode);
+    print(user?.runtimeType);
     return user; // here you write the codes to input the data into firestore
   }
 }

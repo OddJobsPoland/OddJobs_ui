@@ -1,10 +1,13 @@
-import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:jobs_ui/pages/user.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:form_validator/form_validator.dart';
 import 'home.dart';
 
 class MainIntro extends StatefulWidget {
@@ -17,6 +20,34 @@ class MainIntro extends StatefulWidget {
 class _MainIntroState extends State<MainIntro> {
   SharedPreferences? _sharedPreferneces;
   bool isIntroDone = false;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  Map<String, dynamic> userAttributes = Map<String, dynamic>();
+  List<String> citiesAvailable = [];
+  List<String> selectedChoices = [];
+  String dropdownValue = "Warszawa";
+
+  final User? authUser = FirebaseAuth.instance.currentUser;
+  UserData newUser = UserData(
+      addres: '',
+      attributes: [],
+      authId: '',
+      birth: '',
+      city: '',
+      name: '',
+      phone: '');
+
+  final userRef =
+      FirebaseFirestore.instance.collection('Users').withConverter<UserData>(
+            fromFirestore: (snapshot, _) => UserData.fromJson(snapshot.data()!),
+            toFirestore: (movie, _) => movie.toJson(),
+          );
+
+  TextEditingController addresController = TextEditingController();
+  TextEditingController birthController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+
+  //ASYNC
 
   _MainIntroState() {
     getSharedPreferences()
@@ -25,6 +56,14 @@ class _MainIntroState extends State<MainIntro> {
             }))
         .then((value) => getIntroDoneValue().then((val) => setState(() {
               isIntroDone = val!;
+            })))
+        .then((value) =>
+            readAvailableUserAttributes().then((value) => setState(() {
+                  userAttributes = value;
+                })))
+        .then((value) => readAvailableCities().then((value) => setState(() {
+              citiesAvailable =
+                  value.entries.map((e) => e.value.toString()).toList();
             })));
   }
 
@@ -34,18 +73,24 @@ class _MainIntroState extends State<MainIntro> {
 
   Future<bool?> getIntroDoneValue() async {
     return _sharedPreferneces!.getBool('IntroDone') == null
-        ? await _sharedPreferneces!.setBool('IntroDone', false)
+        ? await _sharedPreferneces!.setBool('IntroDone', true)
         : _sharedPreferneces!.getBool('IntroDone');
   }
+
+  //END ASYNC
 
   @override
   void initState() {
     super.initState();
+    newUser.authId = authUser!.uid;
+    newUser.name = authUser!.displayName ?? '';
+    newUser.phone = authUser!.phoneNumber ?? '';
+    nameController.text = newUser.name;
+    phoneController.text = newUser.phone;
   }
 
   @override
   Widget build(BuildContext context) {
-    var _value;
     PersistentTabController _controller;
     _controller = PersistentTabController(initialIndex: 1);
 
@@ -58,31 +103,31 @@ class _MainIntroState extends State<MainIntro> {
         PersistentBottomNavBarItem(
           icon: Icon(Icons.emoji_people),
           title: ("Konto"),
-          activeColorPrimary: Colors.greenAccent,
-          inactiveColorPrimary: CupertinoColors.systemGrey,
+          activeColorPrimary: Colors.amber,
+          inactiveColorPrimary: Color.fromARGB(255, 77, 201, 141),
         ),
         PersistentBottomNavBarItem(
           icon: Icon(Icons.auto_awesome_motion_outlined),
           title: ("Oferty"),
-          activeColorPrimary: Colors.greenAccent,
-          inactiveColorPrimary: CupertinoColors.systemGrey,
+          activeColorPrimary: Colors.amber,
+          inactiveColorPrimary: Color.fromARGB(255, 77, 201, 141),
         ),
         PersistentBottomNavBarItem(
           icon: Icon(Icons.forum_rounded),
           title: ("Czaty"),
-          activeColorPrimary: Colors.greenAccent,
-          inactiveColorPrimary: CupertinoColors.systemGrey,
+          activeColorPrimary: Colors.amber,
+          inactiveColorPrimary: Color.fromARGB(255, 77, 201, 141),
         ),
       ];
     }
 
-    List<String> options = ['wózki widłowe', 'sanepid', 'ketegoria b'];
-
+    ValidationBuilder.setLocale('pl');
     List<PageViewModel> _introScreenPages() {
       return [
         PageViewModel(
-          title: "Witaj w {app_name}!",
-          body: "Pomożemy Ci znaleźć pracę marzeń już w 3 dni!",
+          title: "Witaj w OddJobs!",
+          body:
+              "Pomożemy Ci znaleźć pracę marzeń już w 3 dni! Jesteśmy agregatem ofert pracy dla niebieskich kołnierzyków, zajęć typowo miejskich. Zależny nam na tym, żeby udało Ci się znaleźć pracę jak najszybciej, więc pracodawca jest zobligowany odpowiedzieć na twoją aplikację w max 3 dni i możliwe, że zaprosić Cię na rozmowę😏",
           image: Image.asset("assets/sitting-1@2x.png"),
         ),
         PageViewModel(
@@ -97,10 +142,13 @@ class _MainIntroState extends State<MainIntro> {
               width: 1,
               height: 26,
             ),
-            TextField(
+            TextFormField(
+              controller: nameController,
+              autovalidateMode: AutovalidateMode.always,
+              validator: ValidationBuilder().minLength(5).maxLength(40).build(),
               decoration: InputDecoration(
                 labelText: 'Jak się nazywasz',
-                labelStyle: TextStyle(color: Colors.green),
+                labelStyle: TextStyle(color: Colors.blueGrey),
                 focusColor: Colors.green,
                 border: OutlineInputBorder(),
                 enabledBorder: OutlineInputBorder(
@@ -124,10 +172,13 @@ class _MainIntroState extends State<MainIntro> {
               width: 1,
               height: 28,
             ),
-            TextField(
+            TextFormField(
+              controller: phoneController,
+              autovalidateMode: AutovalidateMode.always,
+              validator: ValidationBuilder().phone().maxLength(13).build(),
               decoration: InputDecoration(
                 labelText: 'Numer telefonu',
-                labelStyle: TextStyle(color: Colors.green),
+                labelStyle: TextStyle(color: Colors.blueGrey),
                 focusColor: Colors.green,
                 border: OutlineInputBorder(),
                 enabledBorder: OutlineInputBorder(
@@ -140,7 +191,7 @@ class _MainIntroState extends State<MainIntro> {
                 floatingLabelBehavior: FloatingLabelBehavior.always,
               ),
               textInputAction: TextInputAction.next,
-              keyboardType: TextInputType.text,
+              keyboardType: TextInputType.phone,
               style: TextStyle(fontWeight: FontWeight.bold),
               showCursor: true,
               cursorColor: Colors.amber,
@@ -151,47 +202,57 @@ class _MainIntroState extends State<MainIntro> {
               width: 1,
               height: 28,
             ),
-            DropdownButton<String>(
-              value: "Warszawa",
-              borderRadius: BorderRadius.horizontal(
-                  left: Radius.circular(30), right: Radius.circular(30)),
-              isExpanded: true,
-              alignment: AlignmentDirectional.centerStart,
-              elevation: 16,
-              style: const TextStyle(color: Colors.green),
-              underline: Container(
-                height: 0,
-                color: Colors.greenAccent,
+            Container(
+              width: MediaQuery.of(context).size.width * 0.95,
+              padding: EdgeInsets.symmetric(horizontal: 10.0),
+              decoration: ShapeDecoration(
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(
+                      width: 2.0,
+                      style: BorderStyle.solid,
+                      color: Colors.greenAccent),
+                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                ),
               ),
-              onChanged: (String? newValue) {
-                // setState(() {
-                //   dropdownValue = newValue!;
-                // });
-              },
-              items: <String>[
-                'Warszawa',
-                'Poznań',
-                'Wrocław',
-                'Gdańsk',
-                'Kraków',
-                'Białystok',
-                'Katowice',
-                'Rzeszów'
-              ].map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
+              child: DropdownButton<String>(
+                value: dropdownValue,
+                borderRadius: BorderRadius.horizontal(
+                    left: Radius.circular(10), right: Radius.circular(10)),
+                isExpanded: true,
+                alignment: AlignmentDirectional.centerStart,
+                elevation: 16,
+                //style: const TextStyle(fontWeight: FontWeight.bold),
+                underline: Container(
+                  height: 0,
+                  color: Colors.greenAccent,
+                ),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    dropdownValue = newValue == null ? "Poznań" : newValue;
+                  });
+                },
+                items: citiesAvailable.map(
+                  (val) {
+                    return DropdownMenuItem<String>(
+                      value: val.toString(),
+                      child: Text(val),
+                    );
+                  },
+                ).toList(),
+              ),
             ),
             SizedBox(
               width: 1,
               height: 28,
             ),
-            TextField(
+            TextFormField(
+              controller: addresController,
+              autovalidateMode: AutovalidateMode.always,
+              validator: ValidationBuilder().minLength(4).maxLength(60).build(),
               decoration: InputDecoration(
                 labelText: 'Adres zamieszkania',
-                labelStyle: TextStyle(color: Colors.green),
+                hintText: 'Ulica i numer',
+                labelStyle: TextStyle(color: Colors.blueGrey),
                 focusColor: Colors.green,
                 border: OutlineInputBorder(),
                 enabledBorder: OutlineInputBorder(
@@ -215,10 +276,19 @@ class _MainIntroState extends State<MainIntro> {
               width: 1,
               height: 28,
             ),
-            TextField(
+            TextFormField(
+              controller: birthController,
+              autovalidateMode: AutovalidateMode.always,
+              validator: ValidationBuilder()
+                  .regExp(
+                      RegExp(
+                          r"^([0-2][0-9]|(3)[0-1])(\.)(((0)[0-9])|((1)[0-2]))(\.)\d{4}$"),
+                      "Podaj poprawną datę urodzin np. 25.08.1999")
+                  .build(),
               decoration: InputDecoration(
                 labelText: 'Data urodzin',
-                labelStyle: TextStyle(color: Colors.green),
+                hintText: "DD.MM.RRRR",
+                labelStyle: TextStyle(color: Colors.blueGrey),
                 focusColor: Colors.green,
                 border: OutlineInputBorder(),
                 enabledBorder: OutlineInputBorder(
@@ -231,7 +301,7 @@ class _MainIntroState extends State<MainIntro> {
                 floatingLabelBehavior: FloatingLabelBehavior.always,
               ),
               textInputAction: TextInputAction.done,
-              keyboardType: TextInputType.text,
+              keyboardType: TextInputType.datetime,
               style: TextStyle(fontWeight: FontWeight.bold),
               showCursor: true,
               cursorColor: Colors.amber,
@@ -256,16 +326,34 @@ class _MainIntroState extends State<MainIntro> {
               ),
               Wrap(
                 children: List<Widget>.generate(
-                  options.length,
+                  userAttributes.length,
                   (int idx) {
-                    return ChoiceChip(
-                        label: Text(options[idx]),
-                        selected: _value == idx,
-                        onSelected: (bool selected) {
-                          setState(() {
-                            _value = selected ? idx : null;
-                          });
-                        });
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: ChoiceChip(
+                          selected: selectedChoices.contains(
+                              userAttributes["${idx + 1}"].toString()),
+                          label: Text(userAttributes["${idx + 1}"].toString()),
+                          selectedColor: Colors.greenAccent.shade100,
+                          shadowColor: Colors.teal,
+                          backgroundColor: Colors.white,
+                          side: BorderSide(
+                              color: Colors.greenAccent.shade100, width: 1.8),
+                          elevation: 4,
+                          pressElevation: 0.1,
+                          onSelected: (bool selected) {
+                            setState(() {
+                              print(selectedChoices);
+                              print(selected);
+                              selectedChoices.contains(
+                                      userAttributes["${idx + 1}"].toString())
+                                  ? selectedChoices.remove(
+                                      userAttributes["${idx + 1}"].toString())
+                                  : selectedChoices
+                                      .add(userAttributes["${idx + 1}"]);
+                            });
+                          }),
+                    );
                   },
                 ).toList(),
               ),
@@ -290,10 +378,14 @@ class _MainIntroState extends State<MainIntro> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(FontAwesomeIcons.twitter, size: 20.0),
+                  Icon(
+                    FontAwesomeIcons.twitter,
+                    size: 20.0,
+                    color: Colors.blue,
+                  ),
                   Text(
-                    " @{app_name}",
-                    style: TextStyle(fontSize: 20),
+                    " @OddJobs",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -345,9 +437,49 @@ class _MainIntroState extends State<MainIntro> {
     }
 
     Future<void> _onIntroEnd(context) async {
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => _tabView()),
-      );
+      //TODO dodać ekrany powodzenia i erroru
+      if (addresController.text.isNotEmpty &&
+          authUser!.uid.isNotEmpty &&
+          birthController.text.isNotEmpty &&
+          nameController.text.isNotEmpty &&
+          phoneController.text.isNotEmpty) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+              builder: (_) => Center(
+                      child: Container(
+                          child: CircularProgressIndicator(
+                    strokeWidth: 8,
+                    color: Colors.amber,
+                  )))),
+        );
+        await userRef
+            .add(
+              UserData(
+                  addres: addresController.text,
+                  attributes: selectedChoices,
+                  authId: authUser!.uid,
+                  birth: birthController.text,
+                  city: dropdownValue,
+                  name: nameController.text,
+                  phone: phoneController.text),
+            )
+            .then((value) => print("User Added"))
+            .catchError((error) => print("Failed to add user: $error"));
+        await _sharedPreferneces!.setBool('IntroDone', false);
+        Navigator.of(context).pop();
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => _tabView()),
+        );
+      } else {
+        Fluttertoast.showToast(
+          msg:
+              "Nie wszystkie pola zostały uzupełnione, bez nich pracodawca nie będzie mógł się z tobą skontaktować 😞",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          backgroundColor: Colors.black.withOpacity(0.1),
+          timeInSecForIosWeb: 10,
+        );
+      }
     }
 
     return !isIntroDone
@@ -358,7 +490,7 @@ class _MainIntroState extends State<MainIntro> {
               _onIntroEnd(context);
             },
             showBackButton: true,
-            back: const Icon(Icons.arrow_back),
+            back: const Icon(Icons.navigate_before_outlined),
             backSemantic: "Wróć",
             nextSemantic: "Dalej",
             doneSemantic: "Gotowe!",
@@ -366,7 +498,7 @@ class _MainIntroState extends State<MainIntro> {
             isBottomSafeArea: true,
             showSkipButton: false,
             next: const Icon(Icons.navigate_next_outlined),
-            done: const Text("Done",
+            done: const Text("Załóż konto!",
                 style: TextStyle(fontWeight: FontWeight.w600)),
             dotsDecorator: DotsDecorator(
                 size: const Size.square(10.0),
@@ -377,5 +509,67 @@ class _MainIntroState extends State<MainIntro> {
                 activeShape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25.0))),
           );
+  }
+
+  Future<Map<String, dynamic>> readAvailableUserAttributes() async {
+    var collection = FirebaseFirestore.instance.collection('UserAttributes');
+    var docSnapshot = await collection.doc('ListOfUserAttribues').get();
+    if (docSnapshot.exists) {
+      Map<String, dynamic> data = docSnapshot.data()!;
+      return data;
+    }
+    return Map<String, dynamic>();
+  }
+
+  Future<Map<String, dynamic>> readAvailableCities() async {
+    var collection = FirebaseFirestore.instance.collection('AppAttributes');
+    var docSnapshot = await collection.doc('CitiesAvailable').get();
+    if (docSnapshot.exists) {
+      Map<String, dynamic> data = docSnapshot.data()!;
+      return data;
+    }
+    return Map<String, dynamic>();
+  }
+}
+
+class UserData {
+  UserData(
+      {required this.addres,
+      required this.attributes,
+      required this.authId,
+      required this.birth,
+      required this.city,
+      required this.name,
+      required this.phone});
+
+  UserData.fromJson(Map<String, Object?> json)
+      : this(
+          addres: json['addres']! as String,
+          attributes: json['attributes']! as List<String>,
+          authId: json['authId']! as String,
+          birth: json['birth']! as String,
+          city: json['city']! as String,
+          name: json['name']! as String,
+          phone: json['phone']! as String,
+        );
+
+  final String addres;
+  final List<String> attributes;
+  String authId;
+  final String birth;
+  final String city;
+  String name;
+  String phone;
+
+  Map<String, Object?> toJson() {
+    return {
+      'addres': addres,
+      'attributes': attributes,
+      'authId': authId,
+      'birth': birth,
+      'city': city,
+      'name': name,
+      'phone': phone,
+    };
   }
 }

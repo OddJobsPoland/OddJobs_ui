@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:jobs_ui/pages/user.dart';
@@ -23,6 +25,27 @@ class _MainIntroState extends State<MainIntro> {
   List<String> citiesAvailable = [];
   List<String> selectedChoices = [];
   String dropdownValue = "Warszawa";
+
+  final User? authUser = FirebaseAuth.instance.currentUser;
+  UserData newUser = UserData(
+      addres: '',
+      attributes: [],
+      authId: '',
+      birth: '',
+      city: '',
+      name: '',
+      phone: '');
+
+  final userRef =
+      FirebaseFirestore.instance.collection('Users').withConverter<UserData>(
+            fromFirestore: (snapshot, _) => UserData.fromJson(snapshot.data()!),
+            toFirestore: (movie, _) => movie.toJson(),
+          );
+
+  TextEditingController addresController = TextEditingController();
+  TextEditingController birthController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
 
   //ASYNC
 
@@ -59,6 +82,11 @@ class _MainIntroState extends State<MainIntro> {
   @override
   void initState() {
     super.initState();
+    newUser.authId = authUser!.uid;
+    newUser.name = authUser!.displayName ?? '';
+    newUser.phone = authUser!.phoneNumber ?? '';
+    nameController.text = newUser.name;
+    phoneController.text = newUser.phone;
   }
 
   @override
@@ -115,6 +143,7 @@ class _MainIntroState extends State<MainIntro> {
               height: 26,
             ),
             TextFormField(
+              controller: nameController,
               autovalidateMode: AutovalidateMode.always,
               validator: ValidationBuilder().minLength(5).maxLength(40).build(),
               decoration: InputDecoration(
@@ -144,6 +173,7 @@ class _MainIntroState extends State<MainIntro> {
               height: 28,
             ),
             TextFormField(
+              controller: phoneController,
               autovalidateMode: AutovalidateMode.always,
               validator: ValidationBuilder().phone().maxLength(13).build(),
               decoration: InputDecoration(
@@ -216,6 +246,7 @@ class _MainIntroState extends State<MainIntro> {
               height: 28,
             ),
             TextFormField(
+              controller: addresController,
               autovalidateMode: AutovalidateMode.always,
               validator: ValidationBuilder().minLength(4).maxLength(60).build(),
               decoration: InputDecoration(
@@ -246,6 +277,7 @@ class _MainIntroState extends State<MainIntro> {
               height: 28,
             ),
             TextFormField(
+              controller: birthController,
               autovalidateMode: AutovalidateMode.always,
               validator: ValidationBuilder()
                   .regExp(
@@ -346,10 +378,14 @@ class _MainIntroState extends State<MainIntro> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(FontAwesomeIcons.twitter, size: 20.0),
+                  Icon(
+                    FontAwesomeIcons.twitter,
+                    size: 20.0,
+                    color: Colors.blue,
+                  ),
                   Text(
                     " @OddJobs",
-                    style: TextStyle(fontSize: 20),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -401,10 +437,49 @@ class _MainIntroState extends State<MainIntro> {
     }
 
     Future<void> _onIntroEnd(context) async {
-      await _sharedPreferneces!.setBool('IntroDone', false);
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => _tabView()),
-      );
+      //TODO dodać ekrany powodzenia i erroru
+      if (addresController.text.isNotEmpty &&
+          authUser!.uid.isNotEmpty &&
+          birthController.text.isNotEmpty &&
+          nameController.text.isNotEmpty &&
+          phoneController.text.isNotEmpty) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+              builder: (_) => Center(
+                      child: Container(
+                          child: CircularProgressIndicator(
+                    strokeWidth: 8,
+                    color: Colors.amber,
+                  )))),
+        );
+        await userRef
+            .add(
+              UserData(
+                  addres: addresController.text,
+                  attributes: selectedChoices,
+                  authId: authUser!.uid,
+                  birth: birthController.text,
+                  city: dropdownValue,
+                  name: nameController.text,
+                  phone: phoneController.text),
+            )
+            .then((value) => print("User Added"))
+            .catchError((error) => print("Failed to add user: $error"));
+        await _sharedPreferneces!.setBool('IntroDone', false);
+        Navigator.of(context).pop();
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => _tabView()),
+        );
+      } else {
+        Fluttertoast.showToast(
+          msg:
+              "Nie wszystkie pola zostały uzupełnione, bez nich pracodawca nie będzie mógł się z tobą skontaktować 😞",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          backgroundColor: Colors.black.withOpacity(0.1),
+          timeInSecForIosWeb: 10,
+        );
+      }
     }
 
     return !isIntroDone
@@ -415,7 +490,7 @@ class _MainIntroState extends State<MainIntro> {
               _onIntroEnd(context);
             },
             showBackButton: true,
-            back: const Icon(Icons.arrow_back),
+            back: const Icon(Icons.navigate_before_outlined),
             backSemantic: "Wróć",
             nextSemantic: "Dalej",
             doneSemantic: "Gotowe!",
@@ -423,7 +498,7 @@ class _MainIntroState extends State<MainIntro> {
             isBottomSafeArea: true,
             showSkipButton: false,
             next: const Icon(Icons.navigate_next_outlined),
-            done: const Text("Done",
+            done: const Text("Załóż konto!",
                 style: TextStyle(fontWeight: FontWeight.w600)),
             dotsDecorator: DotsDecorator(
                 size: const Size.square(10.0),
@@ -454,5 +529,47 @@ class _MainIntroState extends State<MainIntro> {
       return data;
     }
     return Map<String, dynamic>();
+  }
+}
+
+class UserData {
+  UserData(
+      {required this.addres,
+      required this.attributes,
+      required this.authId,
+      required this.birth,
+      required this.city,
+      required this.name,
+      required this.phone});
+
+  UserData.fromJson(Map<String, Object?> json)
+      : this(
+          addres: json['addres']! as String,
+          attributes: json['attributes']! as List<String>,
+          authId: json['authId']! as String,
+          birth: json['birth']! as String,
+          city: json['city']! as String,
+          name: json['name']! as String,
+          phone: json['phone']! as String,
+        );
+
+  final String addres;
+  final List<String> attributes;
+  String authId;
+  final String birth;
+  final String city;
+  String name;
+  String phone;
+
+  Map<String, Object?> toJson() {
+    return {
+      'addres': addres,
+      'attributes': attributes,
+      'authId': authId,
+      'birth': birth,
+      'city': city,
+      'name': name,
+      'phone': phone,
+    };
   }
 }

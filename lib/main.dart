@@ -37,6 +37,7 @@ class MyApp extends StatelessWidget {
           if (!snapshot.hasData) {
             return SignInScreen(providerConfigs: [
               //TwitterProviderConfiguration(apiKey: apiKey, apiSecretKey: apiSecretKey, redirectUri: redirectUri),
+              EmailProviderConfiguration(),
               GoogleProviderConfiguration(
                 clientId:
                     '852126047148-mgv95rk76cl5ir548uqtn2k3fg60e9mv.apps.googleusercontent.com',

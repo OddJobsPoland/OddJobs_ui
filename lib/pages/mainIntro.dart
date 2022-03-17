@@ -95,7 +95,7 @@ class _MainIntroState extends State<MainIntro> {
     _controller = PersistentTabController(initialIndex: 1);
 
     List<Widget> _buildScreens() {
-      return [user(), Home(), Placeholder()];
+      return [user(userData: newUser), Home(), Placeholder()];
     }
 
     List<PersistentBottomNavBarItem> _navBarsItems() {
@@ -339,12 +339,21 @@ class _MainIntroState extends State<MainIntro> {
                           backgroundColor: Colors.white,
                           side: BorderSide(
                               color: Colors.greenAccent.shade100, width: 1.8),
-                          elevation: 4,
+                          elevation: selectedChoices
+                                  .contains(userAttributes["${idx + 1}"])
+                              ? 6
+                              : 0,
                           pressElevation: 0.1,
+                          avatar: selectedChoices
+                                  .contains(userAttributes["${idx + 1}"])
+                              ? Icon(
+                                  Icons.check,
+                                  color: Colors.green.shade700,
+                                )
+                              : null,
                           onSelected: (bool selected) {
                             setState(() {
                               print(selectedChoices);
-                              print(selected);
                               selectedChoices.contains(
                                       userAttributes["${idx + 1}"].toString())
                                   ? selectedChoices.remove(

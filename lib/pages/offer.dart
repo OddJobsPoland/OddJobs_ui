@@ -75,7 +75,7 @@ Jeśli masz w sobie dużo pozytywnej energii, kochasz pracę z ludźmi, a
                 ]),
                 child: Image.network(
                   widget.image,
-                  fit: BoxFit.fitWidth,
+                  fit: BoxFit.cover,
                   alignment: Alignment.center,
                   height: 200,
                 ),

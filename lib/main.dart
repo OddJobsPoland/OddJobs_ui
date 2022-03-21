@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:jobs_ui/pages/chats.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
     _controller = PersistentTabController(initialIndex: 1);
 
     List<Widget> _buildScreens() {
-      return [user(), Home(), Placeholder()];
+      return [user(), Home(), Chats()];
     }
 
     List<PersistentBottomNavBarItem> _navBarsItems() {

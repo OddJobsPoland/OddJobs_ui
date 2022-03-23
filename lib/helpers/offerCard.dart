@@ -45,7 +45,7 @@ class NewsCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "$firma  $ago",
+                        "$firma | $ago",
                         style: Theme.of(context).textTheme.caption,
                       ),
                       Padding(
@@ -109,6 +109,7 @@ class NewsCard extends StatelessWidget {
                         ],
                       ),
                       Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Wrap(
                             crossAxisAlignment: WrapCrossAlignment.center,

@@ -3,9 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jobs_ui/pages/mainIntro.dart';
 
 class user extends StatefulWidget {
-  const user({Key? key}) : super(key: key);
+  final UserData userData;
+  const user({Key? key, required this.userData}) : super(key: key);
 
   @override
   _userState createState() => _userState();
@@ -89,17 +91,13 @@ class _userState extends State<user> {
                               ),
                               children: <TextSpan>[
                                 TextSpan(
-                                    text: basicUserData()!
-                                        .displayName
-                                        ?.split(" ")[0],
+                                    text: widget.userData.name.split(" ")[0],
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 40)),
                                 TextSpan(text: '  '),
                                 TextSpan(
-                                    text: basicUserData()!
-                                        .displayName
-                                        ?.split(" ")[1],
+                                    text: widget.userData.name.split(" ")[1],
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w300,
                                         fontSize: 26)),
@@ -164,7 +162,7 @@ class _userState extends State<user> {
                               fontWeight: FontWeight.w500),
                         ),
                         Text(
-                          basicUserData()!.displayName!.split(" ")[0],
+                          widget.userData.name.split(" ")[0],
                           style: TextStyle(
                               fontSize: 17,
                               fontWeight: FontWeight.w700,
@@ -185,7 +183,7 @@ class _userState extends State<user> {
                               fontWeight: FontWeight.w500),
                         ),
                         Text(
-                          basicUserData()!.displayName!.split(" ")[1],
+                          widget.userData.name.split(" ")[1],
                           style: TextStyle(
                               fontSize: 17,
                               fontWeight: FontWeight.w700,
@@ -216,7 +214,7 @@ class _userState extends State<user> {
                             ),
                             children: <TextSpan>[
                               TextSpan(
-                                  text: '15.08.1999',
+                                  text: widget.userData.birth,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 17)),
@@ -242,7 +240,7 @@ class _userState extends State<user> {
                       color: Colors.grey[800], fontWeight: FontWeight.w500),
                 ),
                 Text(
-                  "Warszawa, Mickiewicza 14",
+                  "${widget.userData.city}, ${widget.userData.addres}",
                   style: TextStyle(
                       fontSize: 17, fontWeight: FontWeight.w700, height: 1.2),
                 ),
@@ -260,72 +258,22 @@ class _userState extends State<user> {
                 SizedBox(
                   height: 4,
                 ),
-                Wrap(children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(3.0, 1, 3, 1),
-                    child: Chip(
-                        elevation: 7,
-                        label: Text("Prawo jazdy kat B"),
-                        backgroundColor: Colors.primaries[
-                            Random().nextInt(Colors.primaries.length)]),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(3.0, 1, 3, 1),
-                    child: Chip(
-                        elevation: 7,
-                        label: Text("Status studenta"),
-                        backgroundColor: Colors.primaries[
-                            Random().nextInt(Colors.primaries.length)]),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(3.0, 1, 3, 1),
-                    child: Chip(
-                        elevation: 7,
-                        label: Text("Książeczka sanepidowska"),
-                        backgroundColor: Colors.primaries[
-                            Random().nextInt(Colors.primaries.length)]),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(3.0, 1, 3, 1),
-                    child: Chip(
-                        elevation: 7,
-                        label: Text("Zaszczepiony/a"),
-                        backgroundColor: Colors.primaries[
-                            Random().nextInt(Colors.primaries.length)]),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(3.0, 1, 3, 1),
-                    child: Chip(
-                        elevation: 7,
-                        label: Text("Pozwolenie na wózki widłowe"),
-                        backgroundColor: Colors.primaries[
-                            Random().nextInt(Colors.primaries.length)]),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(3.0, 1, 3, 1),
-                    child: Chip(
-                        elevation: 7,
-                        label: Text("Niekarany/a"),
-                        backgroundColor: Colors.primaries[
-                            Random().nextInt(Colors.primaries.length)]),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(3.0, 1, 3, 1),
-                    child: Chip(
-                        elevation: 7,
-                        label: Text("Polski natywny"),
-                        backgroundColor: Colors.primaries[
-                            Random().nextInt(Colors.primaries.length)]),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(3.0, 1, 3, 1),
-                    child: Chip(
-                        elevation: 7,
-                        label: Text("Angielski C1"),
-                        backgroundColor: Colors.primaries[
-                            Random().nextInt(Colors.primaries.length)]),
-                  ),
-                ]),
+                Wrap(
+                  children: List<Widget>.generate(
+                    widget.userData.attributes.length,
+                    (int idx) {
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Chip(
+                            elevation: 7,
+                            label:
+                                Text("${widget.userData.attributes[idx + 1]}"),
+                            backgroundColor: Colors.primaries[
+                                Random().nextInt(Colors.primaries.length)]),
+                      );
+                    },
+                  ).toList(),
+                ),
                 SizedBox(
                   height: 16,
                 ),

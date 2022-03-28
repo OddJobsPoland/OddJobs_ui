@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+import 'package:jobs_ui/pages/chatRooms.dart';
+import 'package:jobs_ui/pages/chats.dart';
 import 'package:jobs_ui/pages/user.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -95,7 +97,7 @@ class _MainIntroState extends State<MainIntro> {
     _controller = PersistentTabController(initialIndex: 1);
 
     List<Widget> _buildScreens() {
-      return [user(userData: newUser), Home(), Placeholder()];
+      return [user(userData: newUser), Home(), ChatRooms()];
     }
 
     List<PersistentBottomNavBarItem> _navBarsItems() {

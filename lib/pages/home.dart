@@ -135,7 +135,7 @@ class _HomeState extends State<Home> {
               offers.offers[index].miasto,
               offers.offers[index].umowa,
             ),
-            separatorBuilder: (context, index) => const SizedBox(height: 18.0),
+            separatorBuilder: (context, index) => const SizedBox(height: 24.0),
           )),
     );
   }

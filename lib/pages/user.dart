@@ -1,10 +1,12 @@
 import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:jobs_ui/pages/mainIntro.dart';
+import 'package:intl/intl.dart';
 
+import '../helpers/UserData.dart';
+
+// ignore: camel_case_types
 class user extends StatefulWidget {
   final UserData userData;
   const user({Key? key, required this.userData}) : super(key: key);
@@ -13,6 +15,7 @@ class user extends StatefulWidget {
   _userState createState() => _userState();
 }
 
+// ignore: camel_case_types
 class _userState extends State<user> {
   @override
   Widget build(BuildContext context) {
@@ -91,13 +94,15 @@ class _userState extends State<user> {
                               ),
                               children: <TextSpan>[
                                 TextSpan(
-                                    text: widget.userData.name.split(" ")[0],
+                                    text: UserData.persistentUserData.name
+                                        .split(" ")[0],
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 40)),
                                 TextSpan(text: '  '),
                                 TextSpan(
-                                    text: widget.userData.name.split(" ")[1],
+                                    text: UserData.persistentUserData.name
+                                        .split(" ")[1],
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w300,
                                         fontSize: 26)),
@@ -162,7 +167,7 @@ class _userState extends State<user> {
                               fontWeight: FontWeight.w500),
                         ),
                         Text(
-                          widget.userData.name.split(" ")[0],
+                          UserData.persistentUserData.name.split(" ")[0],
                           style: TextStyle(
                               fontSize: 17,
                               fontWeight: FontWeight.w700,
@@ -183,7 +188,7 @@ class _userState extends State<user> {
                               fontWeight: FontWeight.w500),
                         ),
                         Text(
-                          widget.userData.name.split(" ")[1],
+                          UserData.persistentUserData.name.split(" ")[1],
                           style: TextStyle(
                               fontSize: 17,
                               fontWeight: FontWeight.w700,
@@ -194,45 +199,45 @@ class _userState extends State<user> {
                     SizedBox(
                       width: 32,
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Data urodzenia",
-                          style: TextStyle(
-                              color: Colors.grey[800],
-                              fontWeight: FontWeight.w500),
-                        ),
-                        RichText(
-                          textAlign: TextAlign.start,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 3,
-                          text: TextSpan(
-                            style: const TextStyle(
-                              fontSize: 14.0,
-                              color: Colors.black,
-                            ),
-                            children: <TextSpan>[
-                              TextSpan(
-                                  text: widget.userData.birth,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 17)),
-                              TextSpan(text: '    '),
-                              TextSpan(
-                                  text: '23 lata',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w300,
-                                      fontSize: 17)),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
                   ],
                 ),
                 SizedBox(
                   height: 12,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Data urodzenia",
+                      style: TextStyle(
+                          color: Colors.grey[800], fontWeight: FontWeight.w500),
+                    ),
+                    RichText(
+                      textAlign: TextAlign.start,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 3,
+                      text: TextSpan(
+                        style: const TextStyle(
+                          fontSize: 14.0,
+                          color: Colors.black,
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: UserData.persistentUserData.birth,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 17)),
+                          TextSpan(text: '    '),
+                          TextSpan(
+                              text: '${getAge()} lata',
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w300, fontSize: 17)),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 18,
                 ),
                 Text(
                   "Adres",
@@ -240,7 +245,7 @@ class _userState extends State<user> {
                       color: Colors.grey[800], fontWeight: FontWeight.w500),
                 ),
                 Text(
-                  "${widget.userData.city}, ${widget.userData.addres}",
+                  "${UserData.persistentUserData.city}, ${UserData.persistentUserData.addres}",
                   style: TextStyle(
                       fontSize: 17, fontWeight: FontWeight.w700, height: 1.2),
                 ),
@@ -260,16 +265,22 @@ class _userState extends State<user> {
                 ),
                 Wrap(
                   children: List<Widget>.generate(
-                    widget.userData.attributes.length,
+                    UserData.persistentUserData.attributes.length,
                     (int idx) {
                       return Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
+                        padding: const EdgeInsets.only(right: 12.0),
                         child: Chip(
+                            labelStyle: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            ),
                             elevation: 7,
-                            label:
-                                Text("${widget.userData.attributes[idx + 1]}"),
-                            backgroundColor: Colors.primaries[
-                                Random().nextInt(Colors.primaries.length)]),
+                            shadowColor: Colors.primaries[
+                                Random().nextInt(Colors.primaries.length)],
+                            label: Text(
+                                "${UserData.persistentUserData.attributes[idx]}"),
+                            backgroundColor:
+                                Color(Random().nextInt(0xffffffff))),
                       );
                     },
                   ).toList(),
@@ -468,5 +479,15 @@ class _userState extends State<user> {
     print(user?.hashCode);
     print(user?.runtimeType);
     return user; // here you write the codes to input the data into firestore
+  }
+
+  String getAge() {
+    var now = DateTime.now();
+    DateTime tempDate = Intl.withLocale(
+        'pl',
+        () => new DateFormat("dd.MM.yyyy")
+            .parse(UserData.persistentUserData.birth));
+    var differece = now.difference(tempDate);
+    return (differece.inDays / 365).floor().toString();
   }
 }

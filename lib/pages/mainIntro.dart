@@ -5,11 +5,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:jobs_ui/pages/chatRooms.dart';
-import 'package:jobs_ui/pages/chats.dart';
 import 'package:jobs_ui/pages/user.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:form_validator/form_validator.dart';
+import '../helpers/UserData.dart';
 import 'home.dart';
 
 class MainIntro extends StatefulWidget {
@@ -22,6 +22,7 @@ class MainIntro extends StatefulWidget {
 class _MainIntroState extends State<MainIntro> {
   SharedPreferences? _sharedPreferneces;
   bool isIntroDone = false;
+
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   Map<String, dynamic> userAttributes = Map<String, dynamic>();
   List<String> citiesAvailable = [];
@@ -29,14 +30,7 @@ class _MainIntroState extends State<MainIntro> {
   String dropdownValue = "Warszawa";
 
   final User? authUser = FirebaseAuth.instance.currentUser;
-  UserData newUser = UserData(
-      addres: '',
-      attributes: [],
-      authId: '',
-      birth: '',
-      city: '',
-      name: '',
-      phone: '');
+  UserData newUser = UserData.emptyUserData();
 
   final userRef =
       FirebaseFirestore.instance.collection('Users').withConverter<UserData>(
@@ -463,17 +457,17 @@ class _MainIntroState extends State<MainIntro> {
                     color: Colors.amber,
                   )))),
         );
+        UserData.persistentUserData = UserData(
+            addres: addresController.text,
+            attributes: selectedChoices,
+            authId: authUser!.uid,
+            birth: birthController.text,
+            city: dropdownValue,
+            name: nameController.text,
+            phone: phoneController.text);
+
         await userRef
-            .add(
-              UserData(
-                  addres: addresController.text,
-                  attributes: selectedChoices,
-                  authId: authUser!.uid,
-                  birth: birthController.text,
-                  city: dropdownValue,
-                  name: nameController.text,
-                  phone: phoneController.text),
-            )
+            .add(UserData.persistentUserData)
             .then((value) => print("User Added"))
             .catchError((error) => print("Failed to add user: $error"));
         await _sharedPreferneces!.setBool('IntroDone', false);
@@ -540,47 +534,5 @@ class _MainIntroState extends State<MainIntro> {
       return data;
     }
     return Map<String, dynamic>();
-  }
-}
-
-class UserData {
-  UserData(
-      {required this.addres,
-      required this.attributes,
-      required this.authId,
-      required this.birth,
-      required this.city,
-      required this.name,
-      required this.phone});
-
-  UserData.fromJson(Map<String, Object?> json)
-      : this(
-          addres: json['addres']! as String,
-          attributes: json['attributes']! as List<String>,
-          authId: json['authId']! as String,
-          birth: json['birth']! as String,
-          city: json['city']! as String,
-          name: json['name']! as String,
-          phone: json['phone']! as String,
-        );
-
-  final String addres;
-  final List<String> attributes;
-  String authId;
-  final String birth;
-  final String city;
-  String name;
-  String phone;
-
-  Map<String, Object?> toJson() {
-    return {
-      'addres': addres,
-      'attributes': attributes,
-      'authId': authId,
-      'birth': birth,
-      'city': city,
-      'name': name,
-      'phone': phone,
-    };
   }
 }

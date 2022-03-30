@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jiffy/jiffy.dart';
+// ignore: unused_import
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class Offer extends StatefulWidget {
@@ -57,7 +58,6 @@ Jeśli masz w sobie dużo pozytywnej energii, kochasz pracę z ludźmi, a
   Widget build(BuildContext context) {
     Jiffy.locale("pl");
     return Scaffold(
-        //backgroundColor: Colors.black.withOpacity(0.01),
         body: ListView(
       children: [
         SizedBox(
@@ -246,22 +246,32 @@ Jeśli masz w sobie dużo pozytywnej energii, kochasz pracę z ludźmi, a
         SizedBox(height: 16.0),
         Center(
           child: Wrap(
+            alignment: WrapAlignment.spaceEvenly,
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
+              SizedBox(
+                width: 12,
+              ),
               Icon(
                 Icons.info_outlined,
                 color: Colors.black.withOpacity(0.5),
               ),
-              Text(
-                '  Aplikując teraz odpowiedź dostaniesz już w czwartek!',
-                style: TextStyle(
-                    color: Colors.black.withOpacity(0.5),
-                    fontWeight: FontWeight.w500),
+              SizedBox(
+                width: 12,
+              ),
+              Container(
+                width: 230,
+                child: Text(
+                  'Aplikując teraz odpowiedź dostaniesz już w czwartek!',
+                  style: TextStyle(
+                      color: Colors.black.withOpacity(0.5),
+                      fontWeight: FontWeight.w500),
+                ),
               ),
             ],
           ),
         ),
-        SizedBox(height: 8.0),
+        SizedBox(height: 16.0),
         //Guzik aplikuj
         Center(
           child: ElevatedButton(
@@ -298,32 +308,6 @@ Jeśli masz w sobie dużo pozytywnej energii, kochasz pracę z ludźmi, a
         ),
         SizedBox(
           height: 8,
-        ),
-        //Guzik zapisz
-        Center(
-          child: OutlinedButton(
-            style: ButtonStyle(
-                minimumSize:
-                    MaterialStateProperty.all<Size?>(Size(128.0, 40.0)),
-                foregroundColor: MaterialStateProperty.all<Color>(
-                    Colors.black.withOpacity(0.6)),
-                side: MaterialStateProperty.all<BorderSide>(BorderSide(
-                    width: 1.3, color: Colors.black.withOpacity(0.6))),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(new Radius.circular(30)),
-                        side: BorderSide(color: Colors.greenAccent)))),
-            onPressed: () {
-              setState(() {
-                saveText = 'Zapisano';
-              });
-              debugPrint('Received click');
-            },
-            child: Text(
-              saveText,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-            ),
-          ),
         ),
         SizedBox(height: 40.0),
         // SlidingUpPanel(

@@ -75,11 +75,14 @@ class NewsCard extends StatelessWidget {
                                 SizedBox(
                                   width: 3,
                                 ),
-                                Text(
-                                  typ,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w400),
+                                Container(
+                                  width: 100,
+                                  child: Text(
+                                    typ,
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w400),
+                                  ),
                                 ),
                               ],
                             ),
@@ -88,6 +91,7 @@ class NewsCard extends StatelessWidget {
                             width: 12,
                           ),
                           Wrap(
+                            alignment: WrapAlignment.spaceEvenly,
                             crossAxisAlignment: WrapCrossAlignment.center,
                             children: [
                               Icon(
@@ -98,15 +102,21 @@ class NewsCard extends StatelessWidget {
                               SizedBox(
                                 width: 3,
                               ),
-                              Text(
-                                kasa,
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w400),
+                              Container(
+                                width: 70,
+                                child: Text(
+                                  kasa,
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w400),
+                                ),
                               ),
                             ],
                           ),
                         ],
+                      ),
+                      SizedBox(
+                        height: 8,
                       ),
                       Row(
                         mainAxisSize: MainAxisSize.min,
@@ -135,29 +145,29 @@ class NewsCard extends StatelessWidget {
                               ),
                             ],
                           ),
-                            Wrap(
-                              alignment: WrapAlignment.spaceEvenly,
-                              crossAxisAlignment: WrapCrossAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.assignment_outlined,
-                                  size: 16,
-                                  color: Colors.black.withOpacity(0.5),
+                          Wrap(
+                            alignment: WrapAlignment.spaceEvenly,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.assignment_outlined,
+                                size: 16,
+                                color: Colors.black.withOpacity(0.5),
+                              ),
+                              SizedBox(
+                                width: 3,
+                              ),
+                              Container(
+                                width: 70,
+                                child: Text(
+                                  umowa,
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w400),
                                 ),
-                                SizedBox(
-                                  width: 3,
-                                ),
-                                Container(
-                                  width: 70,
-                                  child: Text(
-                                    umowa,
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w400),
-                                  ),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
+                          ),
                         ],
                       )
                     ],

@@ -399,6 +399,7 @@ class _MainIntroState extends State<MainIntro> {
           ),
           image: Image.asset("assets/standing-22.png"),
         )
+        // TODO: Add profile picture choice, motto and social media links
       ];
     }
 
@@ -465,7 +466,7 @@ class _MainIntroState extends State<MainIntro> {
             city: dropdownValue,
             name: nameController.text,
             phone: phoneController.text);
-
+        UserData.saveUserInPrefs(UserData.persistentUserData);
         await userRef
             .add(UserData.persistentUserData)
             .then((value) => print("User Added"))

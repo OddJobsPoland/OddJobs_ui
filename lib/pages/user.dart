@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -17,6 +16,18 @@ class user extends StatefulWidget {
 
 // ignore: camel_case_types
 class _userState extends State<user> {
+  UserData _userData = UserData.emptyUserData();
+
+  _userState() {
+    getCurrentUser().then((val) => setState(() {
+          _userData = val;
+        }));
+  }
+
+  Future<UserData> getCurrentUser() async {
+    return await UserData.getUserFromPrefs();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -94,15 +105,13 @@ class _userState extends State<user> {
                               ),
                               children: <TextSpan>[
                                 TextSpan(
-                                    text: UserData.persistentUserData.name
-                                        .split(" ")[0],
+                                    text: _userData.name.split(" ")[0],
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 40)),
                                 TextSpan(text: '  '),
                                 TextSpan(
-                                    text: UserData.persistentUserData.name
-                                        .split(" ")[1],
+                                    text: _userData.name.split(" ")[1],
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w300,
                                         fontSize: 26)),
@@ -138,11 +147,12 @@ class _userState extends State<user> {
                             fontWeight: FontWeight.bold, fontSize: 32),
                       ),
                     ),
-                    IconButton(
-                      onPressed: () => print("Ustawienia"),
-                      icon: Icon(CupertinoIcons.gear_solid),
-                      iconSize: 28,
-                    ),
+                    //TODO: ustawinie CV i wyswietlenie go
+                    // IconButton(
+                    //   onPressed: () => print("Ustawienia"),
+                    //   icon: Icon(CupertinoIcons.gear_solid),
+                    //   iconSize: 28,
+                    // ),
                   ],
                 ),
                 SizedBox(height: 6),
@@ -167,7 +177,7 @@ class _userState extends State<user> {
                               fontWeight: FontWeight.w500),
                         ),
                         Text(
-                          UserData.persistentUserData.name.split(" ")[0],
+                          _userData.name.split(" ")[0],
                           style: TextStyle(
                               fontSize: 17,
                               fontWeight: FontWeight.w700,
@@ -188,7 +198,7 @@ class _userState extends State<user> {
                               fontWeight: FontWeight.w500),
                         ),
                         Text(
-                          UserData.persistentUserData.name.split(" ")[1],
+                          _userData.name.split(" ")[1],
                           style: TextStyle(
                               fontSize: 17,
                               fontWeight: FontWeight.w700,
@@ -223,7 +233,7 @@ class _userState extends State<user> {
                         ),
                         children: <TextSpan>[
                           TextSpan(
-                              text: UserData.persistentUserData.birth,
+                              text: _userData.birth,
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 17)),
                           TextSpan(text: '    '),
@@ -245,7 +255,7 @@ class _userState extends State<user> {
                       color: Colors.grey[800], fontWeight: FontWeight.w500),
                 ),
                 Text(
-                  "${UserData.persistentUserData.city}, ${UserData.persistentUserData.addres}",
+                  "${_userData.city}, ${_userData.addres}",
                   style: TextStyle(
                       fontSize: 17, fontWeight: FontWeight.w700, height: 1.2),
                 ),
@@ -265,7 +275,7 @@ class _userState extends State<user> {
                 ),
                 Wrap(
                   children: List<Widget>.generate(
-                    UserData.persistentUserData.attributes.length,
+                    _userData.attributes.length,
                     (int idx) {
                       return Padding(
                         padding: const EdgeInsets.only(right: 12.0),
@@ -277,8 +287,7 @@ class _userState extends State<user> {
                             elevation: 7,
                             shadowColor: Colors.primaries[
                                 Random().nextInt(Colors.primaries.length)],
-                            label: Text(
-                                "${UserData.persistentUserData.attributes[idx]}"),
+                            label: Text("${_userData.attributes[idx]}"),
                             backgroundColor:
                                 Color(Random().nextInt(0xffffffff))),
                       );
@@ -437,32 +446,6 @@ class _userState extends State<user> {
                     ),
                   ),
                 ),
-                Center(
-                  child: OutlinedButton(
-                    style: ButtonStyle(
-                        minimumSize:
-                            MaterialStateProperty.all<Size?>(Size(128.0, 40.0)),
-                        foregroundColor:
-                            MaterialStateProperty.all<Color>(Colors.blueAccent),
-                        side: MaterialStateProperty.all<BorderSide>(
-                            BorderSide(width: 1.3, color: Colors.blueAccent)),
-                        shape: MaterialStateProperty
-                            .all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(new Radius.circular(30)),
-                                side: BorderSide(color: Colors.greenAccent)))),
-                    onPressed: () {
-                      //Add removing intro done flag
-                      showAboutDialog(context: context);
-                      debugPrint('Showing abouts');
-                    },
-                    child: Text(
-                      "O aplikacji",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                    ),
-                  ),
-                ),
               ],
             ),
           ),
@@ -484,9 +467,7 @@ class _userState extends State<user> {
   String getAge() {
     var now = DateTime.now();
     DateTime tempDate = Intl.withLocale(
-        'pl',
-        () => new DateFormat("dd.MM.yyyy")
-            .parse(UserData.persistentUserData.birth));
+        'pl', () => new DateFormat("dd.MM.yyyy").parse(_userData.birth));
     var differece = now.difference(tempDate);
     return (differece.inDays / 365).floor().toString();
   }

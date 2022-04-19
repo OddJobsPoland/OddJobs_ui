@@ -1,7 +1,4 @@
 import 'package:jobs_ui/pages/mainIntro.dart';
-import 'dart:math';
-import 'package:jobs_ui/pages/chats.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutterfire_ui/auth.dart';
@@ -20,6 +17,8 @@ Future<void> main() async {
     title: 'OddJobs',
     themeMode: ThemeMode.light,
     locale: Locale('pl', 'EU'),
+    scrollBehavior: ScrollBehavior(
+        androidOverscrollIndicator: AndroidOverscrollIndicator.stretch),
     //debugShowMaterialGrid: true,
     //showPerformanceOverlay: true,
     //checkerboardRasterCacheImages: true,
@@ -34,7 +33,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {

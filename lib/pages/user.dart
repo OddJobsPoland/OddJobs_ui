@@ -1,10 +1,12 @@
 import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:jobs_ui/pages/mainIntro.dart';
+import 'package:intl/intl.dart';
+import 'package:jobs_ui/helpers/utils.dart';
 
+import '../helpers/UserData.dart';
+
+// ignore: camel_case_types
 class user extends StatefulWidget {
   final UserData userData;
   const user({Key? key, required this.userData}) : super(key: key);
@@ -13,7 +15,20 @@ class user extends StatefulWidget {
   _userState createState() => _userState();
 }
 
+// ignore: camel_case_types
 class _userState extends State<user> {
+  UserData _userData = UserData.emptyUserData();
+
+  _userState() {
+    getCurrentUser().then((val) => setState(() {
+          _userData = val;
+        }));
+  }
+
+  Future<UserData> getCurrentUser() async {
+    return await UserData.getUserFromPrefs();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -91,13 +106,13 @@ class _userState extends State<user> {
                               ),
                               children: <TextSpan>[
                                 TextSpan(
-                                    text: widget.userData.name.split(" ")[0],
+                                    text: _userData.name.split(" ")[0],
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 40)),
                                 TextSpan(text: '  '),
                                 TextSpan(
-                                    text: widget.userData.name.split(" ")[1],
+                                    text: _userData.name.split(" ")[1],
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w300,
                                         fontSize: 26)),
@@ -133,11 +148,12 @@ class _userState extends State<user> {
                             fontWeight: FontWeight.bold, fontSize: 32),
                       ),
                     ),
-                    IconButton(
-                      onPressed: () => print("Ustawienia"),
-                      icon: Icon(CupertinoIcons.gear_solid),
-                      iconSize: 28,
-                    ),
+                    //TODO: ustawinie CV i wyswietlenie go
+                    // IconButton(
+                    //   onPressed: () => print("Ustawienia"),
+                    //   icon: Icon(CupertinoIcons.gear_solid),
+                    //   iconSize: 28,
+                    // ),
                   ],
                 ),
                 SizedBox(height: 6),
@@ -162,7 +178,7 @@ class _userState extends State<user> {
                               fontWeight: FontWeight.w500),
                         ),
                         Text(
-                          widget.userData.name.split(" ")[0],
+                          _userData.name.split(" ")[0],
                           style: TextStyle(
                               fontSize: 17,
                               fontWeight: FontWeight.w700,
@@ -183,7 +199,7 @@ class _userState extends State<user> {
                               fontWeight: FontWeight.w500),
                         ),
                         Text(
-                          widget.userData.name.split(" ")[1],
+                          _userData.name.split(" ")[1],
                           style: TextStyle(
                               fontSize: 17,
                               fontWeight: FontWeight.w700,
@@ -194,45 +210,45 @@ class _userState extends State<user> {
                     SizedBox(
                       width: 32,
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Data urodzenia",
-                          style: TextStyle(
-                              color: Colors.grey[800],
-                              fontWeight: FontWeight.w500),
-                        ),
-                        RichText(
-                          textAlign: TextAlign.start,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 3,
-                          text: TextSpan(
-                            style: const TextStyle(
-                              fontSize: 14.0,
-                              color: Colors.black,
-                            ),
-                            children: <TextSpan>[
-                              TextSpan(
-                                  text: widget.userData.birth,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 17)),
-                              TextSpan(text: '    '),
-                              TextSpan(
-                                  text: '23 lata',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w300,
-                                      fontSize: 17)),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
                   ],
                 ),
                 SizedBox(
                   height: 12,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Data urodzenia",
+                      style: TextStyle(
+                          color: Colors.grey[800], fontWeight: FontWeight.w500),
+                    ),
+                    RichText(
+                      textAlign: TextAlign.start,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 3,
+                      text: TextSpan(
+                        style: const TextStyle(
+                          fontSize: 14.0,
+                          color: Colors.black,
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: _userData.birth,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 17)),
+                          TextSpan(text: '    '),
+                          TextSpan(
+                              text: '${getAge()} lata',
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w300, fontSize: 17)),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 18,
                 ),
                 Text(
                   "Adres",
@@ -240,7 +256,7 @@ class _userState extends State<user> {
                       color: Colors.grey[800], fontWeight: FontWeight.w500),
                 ),
                 Text(
-                  "${widget.userData.city}, ${widget.userData.addres}",
+                  "${_userData.city}, ${_userData.addres}",
                   style: TextStyle(
                       fontSize: 17, fontWeight: FontWeight.w700, height: 1.2),
                 ),
@@ -260,16 +276,21 @@ class _userState extends State<user> {
                 ),
                 Wrap(
                   children: List<Widget>.generate(
-                    widget.userData.attributes.length,
+                    _userData.attributes.length,
                     (int idx) {
                       return Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
+                        padding: const EdgeInsets.only(right: 12.0),
                         child: Chip(
+                            labelStyle: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            ),
                             elevation: 7,
-                            label:
-                                Text("${widget.userData.attributes[idx + 1]}"),
-                            backgroundColor: Colors.primaries[
-                                Random().nextInt(Colors.primaries.length)]),
+                            shadowColor:
+                                colors[Random().nextInt(colors.length)],
+                            label: Text("${_userData.attributes[idx]}"),
+                            backgroundColor:
+                                colors[Random().nextInt(colors.length)]),
                       );
                     },
                   ).toList(),
@@ -426,32 +447,6 @@ class _userState extends State<user> {
                     ),
                   ),
                 ),
-                Center(
-                  child: OutlinedButton(
-                    style: ButtonStyle(
-                        minimumSize:
-                            MaterialStateProperty.all<Size?>(Size(128.0, 40.0)),
-                        foregroundColor:
-                            MaterialStateProperty.all<Color>(Colors.blueAccent),
-                        side: MaterialStateProperty.all<BorderSide>(
-                            BorderSide(width: 1.3, color: Colors.blueAccent)),
-                        shape: MaterialStateProperty
-                            .all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(new Radius.circular(30)),
-                                side: BorderSide(color: Colors.greenAccent)))),
-                    onPressed: () {
-                      //Add removing intro done flag
-                      showAboutDialog(context: context);
-                      debugPrint('Showing abouts');
-                    },
-                    child: Text(
-                      "O aplikacji",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                    ),
-                  ),
-                ),
               ],
             ),
           ),
@@ -468,5 +463,13 @@ class _userState extends State<user> {
     print(user?.hashCode);
     print(user?.runtimeType);
     return user; // here you write the codes to input the data into firestore
+  }
+
+  String getAge() {
+    var now = DateTime.now();
+    DateTime tempDate = Intl.withLocale(
+        'pl', () => new DateFormat("dd.MM.yyyy").parse(_userData.birth));
+    var differece = now.difference(tempDate);
+    return (differece.inDays / 365).floor().toString();
   }
 }

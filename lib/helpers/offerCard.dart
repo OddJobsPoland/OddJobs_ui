@@ -75,11 +75,14 @@ class NewsCard extends StatelessWidget {
                                 SizedBox(
                                   width: 3,
                                 ),
-                                Text(
-                                  typ,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w400),
+                                Container(
+                                  width: 100,
+                                  child: Text(
+                                    typ,
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w400),
+                                  ),
                                 ),
                               ],
                             ),
@@ -88,6 +91,7 @@ class NewsCard extends StatelessWidget {
                             width: 12,
                           ),
                           Wrap(
+                            alignment: WrapAlignment.spaceEvenly,
                             crossAxisAlignment: WrapCrossAlignment.center,
                             children: [
                               Icon(
@@ -98,15 +102,21 @@ class NewsCard extends StatelessWidget {
                               SizedBox(
                                 width: 3,
                               ),
-                              Text(
-                                kasa,
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w400),
+                              Container(
+                                width: 70,
+                                child: Text(
+                                  kasa,
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w400),
+                                ),
                               ),
                             ],
                           ),
                         ],
+                      ),
+                      SizedBox(
+                        height: 8,
                       ),
                       Row(
                         mainAxisSize: MainAxisSize.min,
@@ -123,7 +133,7 @@ class NewsCard extends StatelessWidget {
                                 width: 3,
                               ),
                               Container(
-                                width: 130,
+                                width: 100,
                                 child: Text(
                                   miasto,
                                   softWrap: true,
@@ -135,10 +145,8 @@ class NewsCard extends StatelessWidget {
                               ),
                             ],
                           ),
-                          SizedBox(
-                            width: 6,
-                          ),
                           Wrap(
+                            alignment: WrapAlignment.spaceEvenly,
                             crossAxisAlignment: WrapCrossAlignment.center,
                             children: [
                               Icon(

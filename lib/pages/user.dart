@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:jobs_ui/helpers/utils.dart';
 
 import '../helpers/UserData.dart';
 
@@ -285,11 +286,11 @@ class _userState extends State<user> {
                               fontWeight: FontWeight.w500,
                             ),
                             elevation: 7,
-                            shadowColor: Colors.primaries[
-                                Random().nextInt(Colors.primaries.length)],
+                            shadowColor:
+                                colors[Random().nextInt(colors.length)],
                             label: Text("${_userData.attributes[idx]}"),
                             backgroundColor:
-                                Color(Random().nextInt(0xffffffff))),
+                                colors[Random().nextInt(colors.length)]),
                       );
                     },
                   ).toList(),

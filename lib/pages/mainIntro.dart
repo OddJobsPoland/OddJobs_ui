@@ -9,6 +9,7 @@ import 'package:jobs_ui/pages/user.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:form_validator/form_validator.dart';
+import '../helpers/ChatModel.dart';
 import '../helpers/UserData.dart';
 import 'home.dart';
 
@@ -91,7 +92,7 @@ class _MainIntroState extends State<MainIntro> {
     _controller = PersistentTabController(initialIndex: 1);
 
     List<Widget> _buildScreens() {
-      return [user(userData: newUser), Home(), ChatRooms()];
+      return [user(userData: newUser), Home(), RoomsPage()];
     }
 
     List<PersistentBottomNavBarItem> _navBarsItems() {
@@ -366,6 +367,7 @@ class _MainIntroState extends State<MainIntro> {
           ),
           image: Image.asset("assets/standing-23@2x.png"),
         ),
+        //TODO: add page with adding user description
         PageViewModel(
           title: "Zostańmy w kontakcie",
           bodyWidget: Column(
@@ -404,6 +406,7 @@ class _MainIntroState extends State<MainIntro> {
     }
 
     PersistentTabView _tabView() {
+      ChatModel().initFirebaseChatUser();
       return PersistentTabView(
         context,
         controller: _controller,
@@ -468,7 +471,8 @@ class _MainIntroState extends State<MainIntro> {
             phone: phoneController.text);
         UserData.saveUserInPrefs(UserData.persistentUserData);
         await userRef
-            .add(UserData.persistentUserData)
+            .doc(authUser!.uid)
+            .set(UserData.persistentUserData)
             .then((value) => print("User Added"))
             .catchError((error) => print("Failed to add user: $error"));
         await _sharedPreferneces!.setBool('IntroDone', false);

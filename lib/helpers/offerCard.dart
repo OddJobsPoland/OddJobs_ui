@@ -60,36 +60,6 @@ class NewsCard extends StatelessWidget {
                       ),
                       Row(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 8,
-                            ),
-                            child: Wrap(
-                              crossAxisAlignment: WrapCrossAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.info_outlined,
-                                  size: 16,
-                                  color: Colors.black.withOpacity(0.5),
-                                ),
-                                SizedBox(
-                                  width: 3,
-                                ),
-                                Container(
-                                  width: 100,
-                                  child: Text(
-                                    typ,
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w400),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            width: 12,
-                          ),
                           Wrap(
                             alignment: WrapAlignment.spaceEvenly,
                             crossAxisAlignment: WrapCrossAlignment.center,

@@ -36,7 +36,7 @@ class _MainIntroState extends State<MainIntro> {
   final userRef =
       FirebaseFirestore.instance.collection('Users').withConverter<UserData>(
             fromFirestore: (snapshot, _) => UserData.fromJson(snapshot.data()!),
-            toFirestore: (movie, _) => movie.toJson(),
+            toFirestore: (user, _) => user.toJson(),
           );
 
   TextEditingController addresController = TextEditingController();

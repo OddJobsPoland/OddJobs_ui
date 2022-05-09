@@ -4,6 +4,8 @@ import 'package:jobs_ui/helpers/filters.dart';
 import 'package:jobs_ui/helpers/offerCard.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
+import '../helpers/OfferData.dart';
+
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
@@ -13,6 +15,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   late OffersList offers;
+
   @override
   void initState() {
     var offersJson = jsonDecode("""
@@ -75,7 +78,7 @@ class _HomeState extends State<Home> {
 """);
 
     offers = new OffersList.fromJson(offersJson);
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 5), () {
       setState(() {});
     });
     super.initState();
@@ -123,7 +126,7 @@ class _HomeState extends State<Home> {
         ],
       ),
       body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 30),
           child: ListView.separated(
             itemCount: offers.offers.length,
             itemBuilder: (context, index) => NewsCard(
@@ -137,52 +140,6 @@ class _HomeState extends State<Home> {
             ),
             separatorBuilder: (context, index) => const SizedBox(height: 24.0),
           )),
-    );
-  }
-}
-
-class OffersList {
-  final List<Offer> offers;
-
-  OffersList({
-    required this.offers,
-  });
-
-  factory OffersList.fromJson(List<dynamic> parsedJson) {
-    List<Offer> offers = List<Offer>.empty(growable: true);
-    offers = parsedJson.map((i) => Offer.fromJson(i)).toList();
-
-    return new OffersList(offers: offers);
-  }
-}
-
-class Offer {
-  final String image;
-  final String firma;
-  final String stanowisko;
-  final String typ;
-  final String kasa;
-  final String miasto;
-  final String umowa;
-
-  Offer(
-      {required this.image,
-      required this.firma,
-      required this.stanowisko,
-      required this.typ,
-      required this.kasa,
-      required this.miasto,
-      required this.umowa});
-
-  factory Offer.fromJson(Map<String, dynamic> json) {
-    return new Offer(
-      image: json['image'].toString(),
-      firma: json['firma'].toString(),
-      stanowisko: json['stanowisko'].toString(),
-      typ: json['typ'].toString(),
-      kasa: json['kasa'].toString(),
-      miasto: json['miasto'].toString(),
-      umowa: json['umowa'].toString(),
     );
   }
 }

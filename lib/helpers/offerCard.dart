@@ -3,28 +3,34 @@ import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:jobs_ui/pages/offer.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class NewsCard extends StatelessWidget {
-  NewsCard(
+class OfferCard extends StatelessWidget {
+  OfferCard(
     this.image,
     this.firma,
     this.stanowisko,
     this.typ,
     this.kasa,
+    this.CreatedAt,
     this.miasto,
     this.umowa, {
     Key? key,
   }) : super(key: key);
 
+  final Timestamp CreatedAt;
   final String image, firma, stanowisko, typ, kasa, miasto, umowa;
-  final String ago = Jiffy("2022-01-15", "yyyy-MM-dd").fromNow();
+  late String ago;
   @override
   Widget build(BuildContext context) {
+    ago = Jiffy(DateTime.parse(CreatedAt.toDate().toString()), "yyyy-MM-dd")
+        .fromNow();
     Jiffy.locale("pl");
     return GestureDetector(
         onTap: () => pushNewScreen(
               context,
-              screen: Offer(image, firma, stanowisko, typ, kasa, miasto, umowa),
+              screen: Offer(image, firma, stanowisko, typ, kasa, CreatedAt,
+                  miasto, umowa),
               withNavBar: true, // OPTIONAL VALUE. True by default.
             ),
         child: Column(
@@ -145,6 +151,7 @@ class NewsCard extends StatelessWidget {
                 )
               ],
             ),
+            const SizedBox(height: 18),
           ],
         ));
   }

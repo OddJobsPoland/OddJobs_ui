@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -8,11 +9,12 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class Offer extends StatefulWidget {
   const Offer(this.image, this.firma, this.stanowisko, this.typ, this.kasa,
-      this.miasto, this.umowa,
+      this.CreatedAt, this.miasto, this.umowa,
       {Key? key})
       : super(key: key);
   @override
   _OfferState createState() => _OfferState();
+  final Timestamp CreatedAt;
   final String image, firma, stanowisko, typ, kasa, miasto, umowa;
 }
 

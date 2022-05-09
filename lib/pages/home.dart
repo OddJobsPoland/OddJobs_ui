@@ -1,5 +1,6 @@
-import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterfire_ui/firestore.dart';
 import 'package:jobs_ui/helpers/filters.dart';
 import 'package:jobs_ui/helpers/offerCard.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -14,132 +15,99 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  late OffersList offers;
-
   @override
   void initState() {
-    var offersJson = jsonDecode("""
-[
-{
-  "image": "https://bi.im-g.pl/im/24/45/19/z26499876ICR,Pawel-Jan-Majewski---nowy-prezes-Zarzadu-PGNiG-S-A.jpg",
-  "firma": "Korpo",
-  "stanowisko": "Team leader",
-  "typ": "Manger",
-  "kasa": "12.000 zł/msc",
-  "miasto": "Raszyn",
-  "umowa": "B2B"
-},
-{
-  "image": "https://wordpress1672848.home.pl/img/1920x0-resize/drogerie%20natura-5-2.jpg",
-  "firma": "Drogerie Natura",
-  "stanowisko": "Sprzedawca",
-  "typ": "Pracownik fizyczny",
-  "kasa": "19zł/h",
-  "miasto": "Warszawa, Targówek, głębocka 15",
-  "umowa": "Umowa zlecenie"
-},
-{
-  "image": "https://www.warszawa.pl/wp-content/uploads/2016/11/Arriva_solaris_testy-1-790x395.jpg",
-  "firma": "Arriva sp. z.o.o",
-  "stanowisko": "Kierowca Autobusu",
-  "typ": "Pracownik fizyczny",
-  "kasa": "29zł/h",
-  "miasto": "Warszawa, Wola",
-  "umowa": "Umowa o pracę"
-},
-{
-  "image": "https://ocdn.eu/pulscms-transforms/1/nTNk9kuTURBXy8yNWY2NzAwNC0yMGYxLTQzYzEtODE3MS0xYzhmZTRiYWY1N2YuanBlZ5GVAs0BigDDw4GhMAE",
-  "firma": "Szkoła podstawowa",
-  "stanowisko": "Nauczyciel/ka",
-  "typ": "Specjalista",
-  "kasa": "3800 zł/miesiąc",
-  "miasto": "Pruszków, Marii 3",
-  "umowa": "Umowa o pracę"
-},
-{
-  "image": "https://upload.wikimedia.org/wikipedia/en/1/1a/Programming_Examples_in_Prolog.png",
-  "firma": "Startup",
-  "stanowisko": "Programista prolog",
-  "typ": "Specjalista",
-  "kasa": "135 zł/h",
-  "miasto": "Warszawa, Rondo ONZ",
-  "umowa": "B2B"
-},
-{
-  "image": "https://juwentus.pl/media/pracownicy/20180926Juventus1278.jpg",
-  "firma": "Ochrona",
-  "stanowisko": "Pracownik Ochrony",
-  "typ": "Pracownik fizyczny",
-  "kasa": "18zł/h",
-  "miasto": "Warszawa, Praga południe",
-  "umowa": "Umowa o pracę"
-}
-]
-""");
-
-    offers = new OffersList.fromJson(offersJson);
-    Future.delayed(const Duration(seconds: 5), () {
-      setState(() {});
-    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        toolbarHeight: 75.0,
         backgroundColor: Colors.white,
-        elevation: 0,
-        title: const Text(
-          " Oferty",
-          style: TextStyle(
-              color: Colors.black, fontSize: 30.0, fontWeight: FontWeight.w900),
+        appBar: AppBar(
+          toolbarHeight: 75.0,
+          backgroundColor: Colors.white,
+          elevation: 0,
+          title: const Text(
+            " Oferty",
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: 30.0,
+                fontWeight: FontWeight.w900),
+          ),
+          actions: <Widget>[
+            Padding(
+                padding: EdgeInsets.only(right: 2.0),
+                child: IconButton(
+                    onPressed: () {
+                      showBarModalBottomSheet(
+                          context: context,
+                          builder: (context) => Filters(),
+                          topControl: SizedBox(
+                            height: 130,
+                          ));
+                    },
+                    icon: Icon(
+                      Icons.filter_alt,
+                      color: Colors.black.withOpacity(0.85),
+                      size: 30.0,
+                    ))),
+            Padding(
+                padding: EdgeInsets.only(right: 10.0),
+                child: IconButton(
+                    onPressed: null,
+                    icon: Icon(
+                      Icons.bookmark,
+                      color: Colors.black.withOpacity(0.85),
+                      size: 30.0,
+                    )))
+          ],
         ),
-        actions: <Widget>[
-          Padding(
-              padding: EdgeInsets.only(right: 2.0),
-              child: IconButton(
-                  onPressed: () {
-                    showBarModalBottomSheet(
-                        context: context,
-                        builder: (context) => Filters(),
-                        topControl: SizedBox(
-                          height: 130,
-                        ));
-                  },
-                  icon: Icon(
-                    Icons.filter_alt,
-                    color: Colors.black.withOpacity(0.85),
-                    size: 30.0,
-                  ))),
-          Padding(
-              padding: EdgeInsets.only(right: 10.0),
-              child: IconButton(
-                  onPressed: null,
-                  icon: Icon(
-                    Icons.bookmark,
-                    color: Colors.black.withOpacity(0.85),
-                    size: 30.0,
-                  )))
-        ],
-      ),
-      body: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 0, 16, 30),
-          child: ListView.separated(
-            itemCount: offers.offers.length,
-            itemBuilder: (context, index) => NewsCard(
-              offers.offers[index].image,
-              offers.offers[index].firma,
-              offers.offers[index].stanowisko,
-              offers.offers[index].typ,
-              offers.offers[index].kasa,
-              offers.offers[index].miasto,
-              offers.offers[index].umowa,
-            ),
-            separatorBuilder: (context, index) => const SizedBox(height: 24.0),
-          )),
-    );
+        body: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 30),
+            child: FirestoreQueryBuilder<OfferData>(
+              pageSize: 5,
+              query: FirebaseFirestore.instance
+                  .collection('Offers')
+                  .orderBy('CreatedAt', descending: true)
+                  .withConverter<OfferData>(
+                      fromFirestore: ((snapshot, options) =>
+                          OfferData.fromJson(snapshot.data()!)),
+                      toFirestore: (value, options) => value.toJson()),
+              builder: (context, snapshot, _) {
+                if (snapshot.isFetching) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text('Błąd'),
+                  );
+                } else {
+                  return ListView.builder(
+                      itemBuilder: (context, index) {
+                        final hasReachEnd = snapshot.hasMore &&
+                            index + 1 == snapshot.docs.length &&
+                            !snapshot.isFetchingMore;
+
+                        if (hasReachEnd) {
+                          snapshot.fetchMore();
+                        }
+                        final post = snapshot.docs[index].data();
+                        return OfferCard(
+                          post.image,
+                          post.firma,
+                          post.stanowisko,
+                          post.typ,
+                          post.kasa,
+                          post.CreatedAt,
+                          post.miasto,
+                          post.umowa,
+                        );
+                      },
+                      itemCount: snapshot.docs.length);
+                }
+              },
+            )));
   }
 }

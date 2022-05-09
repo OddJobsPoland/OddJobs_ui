@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class OffersList {
   OffersList({
     required this.offers,
@@ -29,7 +31,7 @@ class OfferData {
   final String stanowisko;
   final String typ;
   final String kasa;
-  final String CreatedAt;
+  final Timestamp CreatedAt;
   final String miasto;
   final String umowa;
 
@@ -40,9 +42,11 @@ class OfferData {
       stanowisko: json['stanowisko'].toString(),
       typ: json['typ'].toString(),
       kasa: json['kasa'].toString(),
-      CreatedAt: json['CreatedAt'].toString(),
+      CreatedAt: json['CreatedAt'] as Timestamp,
       miasto: json['miasto'].toString(),
       umowa: json['umowa'].toString(),
     );
   }
+
+  toJson() {}
 }

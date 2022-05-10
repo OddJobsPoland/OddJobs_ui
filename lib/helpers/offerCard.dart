@@ -64,6 +64,10 @@ class OfferCard extends StatelessWidget {
                               letterSpacing: 0.15),
                         ),
                       ),
+                      //Money
+                      SizedBox(
+                        height: 4,
+                      ),
                       Row(
                         children: [
                           Wrap(
@@ -78,8 +82,7 @@ class OfferCard extends StatelessWidget {
                               SizedBox(
                                 width: 3,
                               ),
-                              Container(
-                                width: 70,
+                              Flexible(
                                 child: Text(
                                   kasa,
                                   style: TextStyle(
@@ -92,60 +95,60 @@ class OfferCard extends StatelessWidget {
                         ],
                       ),
                       SizedBox(
-                        height: 8,
+                        height: 6,
                       ),
+                      //Adress
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Wrap(
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
-                              Icon(
-                                CupertinoIcons.location,
-                                size: 16,
-                                color: Colors.black.withOpacity(0.5),
-                              ),
-                              SizedBox(
-                                width: 3,
-                              ),
-                              Container(
-                                width: 100,
-                                child: Text(
-                                  miasto,
-                                  softWrap: true,
-                                  overflow: TextOverflow.fade,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                              ),
-                            ],
+                          Icon(
+                            CupertinoIcons.location,
+                            size: 16,
+                            color: Colors.black.withOpacity(0.5),
                           ),
-                          Wrap(
-                            alignment: WrapAlignment.spaceEvenly,
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.assignment_outlined,
-                                size: 16,
-                                color: Colors.black.withOpacity(0.5),
-                              ),
-                              SizedBox(
-                                width: 3,
-                              ),
-                              Container(
-                                width: 70,
-                                child: Text(
-                                  umowa,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                              ),
-                            ],
+                          SizedBox(
+                            width: 3,
+                          ),
+                          Flexible(
+                            child: Text(
+                              miasto,
+                              softWrap: true,
+                              overflow: TextOverflow.fade,
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400),
+                            ),
                           ),
                         ],
-                      )
+                      ),
+                      SizedBox(
+                        height: 6,
+                      ),
+                      //Contract
+                      Row(mainAxisSize: MainAxisSize.min, children: [
+                        Wrap(
+                          alignment: WrapAlignment.spaceEvenly,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.assignment_outlined,
+                              size: 16,
+                              color: Colors.black.withOpacity(0.5),
+                            ),
+                            SizedBox(
+                              width: 3,
+                            ),
+                            Flexible(
+                              child: Text(
+                                umowa,
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ])
                     ],
                   ),
                 )

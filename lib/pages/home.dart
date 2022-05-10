@@ -64,9 +64,9 @@ class _HomeState extends State<Home> {
           ],
         ),
         body: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 30),
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
             child: FirestoreQueryBuilder<OfferData>(
-              pageSize: 5,
+              pageSize: 10,
               query: FirebaseFirestore.instance
                   .collection('Offers')
                   .orderBy('CreatedAt', descending: true)
@@ -83,6 +83,10 @@ class _HomeState extends State<Home> {
                   return Center(
                     child: Text('Błąd'),
                   );
+                } else if (snapshot.docs.isEmpty) {
+                  return Center(
+                    child: Text('Brak ofert'),
+                  );
                 } else {
                   return ListView.builder(
                       itemBuilder: (context, index) {
@@ -91,7 +95,9 @@ class _HomeState extends State<Home> {
                             !snapshot.isFetchingMore;
 
                         if (hasReachEnd) {
-                          snapshot.fetchMore();
+                          Future.delayed(Duration(milliseconds: 2000), () {
+                            snapshot.fetchMore();
+                          });
                         }
                         final post = snapshot.docs[index].data();
                         return OfferCard(

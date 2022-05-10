@@ -14,6 +14,7 @@ class Offer extends StatefulWidget {
       : super(key: key);
   @override
   _OfferState createState() => _OfferState();
+  // ignore: non_constant_identifier_names
   final Timestamp CreatedAt;
   final String image, firma, stanowisko, typ, kasa, miasto, umowa;
 }
@@ -55,9 +56,10 @@ Jeśli masz w sobie dużo pozytywnej energii, kochasz pracę z ludźmi, a
 
   String applyText = "Aplikuj";
   String saveText = 'Zapisz do ulubionych';
-  String ago = Jiffy("2022-01-15", "yyyy-MM-dd").fromNow();
+  late String ago;
   @override
   Widget build(BuildContext context) {
+    ago = Jiffy(widget.CreatedAt.toDate().toString(), "yyyy-MM-dd").fromNow();
     Jiffy.locale("pl");
     return Scaffold(
         body: ListView(
@@ -84,16 +86,21 @@ Jeśli masz w sobie dużo pozytywnej energii, kochasz pracę z ludźmi, a
               ),
             ),
             Positioned(
-              top: 8,
-              right: 8,
-              child: IconButton(
-                  onPressed: null,
-                  icon: Icon(
-                    Icons.bookmark_outline,
-                    color: Colors.black,
-                    size: 36.0,
-                  )),
-            )
+                top: 10,
+                right: 10,
+                child: ClipOval(
+                  child: Material(
+                    color: Colors.greenAccent, // Button color
+                    child: InkWell(
+                      splashColor: Colors.green[700], // Splash color
+                      onTap: () {},
+                      child: SizedBox(
+                          width: 46,
+                          height: 46,
+                          child: Icon(Icons.bookmark_outline)),
+                    ),
+                  ),
+                ))
           ]),
         ),
 
@@ -114,15 +121,17 @@ Jeśli masz w sobie dużo pozytywnej energii, kochasz pracę z ludźmi, a
         //Firma
         Row(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0),
-              child: Text(
-                widget.firma,
-                textAlign: TextAlign.right,
-                style: TextStyle(
-                    color: Colors.lightGreenAccent.shade700,
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w700),
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 16.0),
+                child: Text(
+                  widget.firma,
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                      color: Colors.lightGreenAccent.shade700,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w700),
+                ),
               ),
             ),
             SizedBox(
@@ -134,13 +143,16 @@ Jeśli masz w sobie dużo pozytywnej energii, kochasz pracę z ludźmi, a
             SizedBox(
               width: 16,
             ),
-            Text(
-              ago,
-              textAlign: TextAlign.end,
-              style: TextStyle(
-                  color: Colors.black.withOpacity(0.7),
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w400),
+            Padding(
+              padding: const EdgeInsets.only(right: 12.0),
+              child: Text(
+                ago,
+                textAlign: TextAlign.end,
+                style: TextStyle(
+                    color: Colors.black.withOpacity(0.7),
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w400),
+              ),
             ),
           ],
         ),
@@ -340,10 +352,5 @@ Jeśli masz w sobie dużo pozytywnej energii, kochasz pracę z ludźmi, a
         // ),
       ],
     ));
-  }
-
-  Future<String> daysAgoPl() async {
-    await Jiffy.locale("pl");
-    return Jiffy("2022-01-15", "yyyy-MM-dd").toString();
   }
 }

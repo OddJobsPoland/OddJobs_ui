@@ -23,6 +23,7 @@ class OfferData {
       required this.typ,
       required this.kasa,
       required this.CreatedAt,
+      required this.offerDescription,
       required this.miasto,
       required this.umowa});
 
@@ -32,6 +33,7 @@ class OfferData {
   final String typ;
   final String kasa;
   final Timestamp CreatedAt;
+  final String offerDescription;
   final String miasto;
   final String umowa;
 
@@ -43,6 +45,7 @@ class OfferData {
       typ: json['typ'].toString(),
       kasa: json['kasa'].toString(),
       CreatedAt: json['CreatedAt'] as Timestamp,
+      offerDescription: json['offerDescription'].toString(),
       miasto: json['miasto'].toString(),
       umowa: json['umowa'].toString(),
     );

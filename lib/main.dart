@@ -17,8 +17,7 @@ Future<void> main() async {
     title: 'OddJobs',
     themeMode: ThemeMode.light,
     locale: Locale('pl', 'EU'),
-    scrollBehavior: ScrollBehavior(
-        androidOverscrollIndicator: AndroidOverscrollIndicator.stretch),
+    theme: ThemeData(useMaterial3: true),
     //debugShowMaterialGrid: true,
     //showPerformanceOverlay: true,
     //checkerboardRasterCacheImages: true,

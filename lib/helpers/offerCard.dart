@@ -13,13 +13,21 @@ class OfferCard extends StatelessWidget {
     this.typ,
     this.kasa,
     this.CreatedAt,
+    this.offerDescription,
     this.miasto,
     this.umowa, {
     Key? key,
   }) : super(key: key);
 
   final Timestamp CreatedAt;
-  final String image, firma, stanowisko, typ, kasa, miasto, umowa;
+  final String image,
+      firma,
+      stanowisko,
+      typ,
+      kasa,
+      offerDescription,
+      miasto,
+      umowa;
   late String ago;
   @override
   Widget build(BuildContext context) {
@@ -30,7 +38,7 @@ class OfferCard extends StatelessWidget {
         onTap: () => pushNewScreen(
               context,
               screen: Offer(image, firma, stanowisko, typ, kasa, CreatedAt,
-                  miasto, umowa),
+                  offerDescription, miasto, umowa),
               withNavBar: true, // OPTIONAL VALUE. True by default.
             ),
         child: Column(

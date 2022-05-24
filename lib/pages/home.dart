@@ -107,6 +107,7 @@ class _HomeState extends State<Home> {
                           post.typ,
                           post.kasa,
                           post.CreatedAt,
+                          post.offerDescription,
                           post.miasto,
                           post.umowa,
                         );

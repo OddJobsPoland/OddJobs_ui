@@ -18,11 +18,14 @@ class user extends StatefulWidget {
 // ignore: camel_case_types
 class _userState extends State<user> {
   UserData _userData = UserData.emptyUserData();
+  String _profilePictureURL = "";
 
   _userState() {
     getCurrentUser().then((val) => setState(() {
           _userData = val;
         }));
+
+    _profilePictureURL = basicUserData()!.photoURL.toString();
   }
 
   Future<UserData> getCurrentUser() async {
@@ -58,8 +61,10 @@ class _userState extends State<user> {
                               shape: BoxShape.circle,
                               image: new DecorationImage(
                                   fit: BoxFit.fill,
-                                  image: new NetworkImage(
-                                      basicUserData()!.photoURL.toString())))),
+                                  image: new NetworkImage((_profilePictureURL !=
+                                          "null")
+                                      ? _profilePictureURL
+                                      : "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png")))),
                       Positioned(
                           child: ClipRRect(
                               borderRadius:

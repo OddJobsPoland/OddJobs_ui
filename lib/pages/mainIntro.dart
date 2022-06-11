@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+import 'package:jobs_ui/helpers/dbTools.dart';
 import 'package:jobs_ui/pages/chatRooms.dart';
 import 'package:jobs_ui/pages/user.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -36,7 +37,7 @@ class _MainIntroState extends State<MainIntro> {
   final userRef =
       FirebaseFirestore.instance.collection('Users').withConverter<UserData>(
             fromFirestore: (snapshot, _) => UserData.fromJson(snapshot.data()!),
-            toFirestore: (movie, _) => movie.toJson(),
+            toFirestore: (user, _) => user.toJson(),
           );
 
   TextEditingController addresController = TextEditingController();
@@ -79,6 +80,8 @@ class _MainIntroState extends State<MainIntro> {
   @override
   void initState() {
     super.initState();
+    //TODO check if user exists in db
+    //UserExistsSync(authUser!.uid);
     newUser.authId = authUser!.uid;
     newUser.name = authUser!.displayName ?? '';
     newUser.phone = authUser!.phoneNumber ?? '';
@@ -492,7 +495,7 @@ class _MainIntroState extends State<MainIntro> {
       }
     }
 
-    return !isIntroDone
+    return !isIntroDone //|| UserExistsSync(authUser?.uid)
         ? _tabView()
         : IntroductionScreen(
             pages: _introScreenPages(),

@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:jobs_ui/helpers/userToCompanyTransition.dart';
 import 'package:jobs_ui/helpers/utils.dart';
 
 import '../helpers/UserData.dart';
@@ -18,11 +19,14 @@ class user extends StatefulWidget {
 // ignore: camel_case_types
 class _userState extends State<user> {
   UserData _userData = UserData.emptyUserData();
+  String _profilePictureURL = "";
 
   _userState() {
     getCurrentUser().then((val) => setState(() {
           _userData = val;
         }));
+
+    _profilePictureURL = basicUserData()!.photoURL.toString();
   }
 
   Future<UserData> getCurrentUser() async {
@@ -58,8 +62,10 @@ class _userState extends State<user> {
                               shape: BoxShape.circle,
                               image: new DecorationImage(
                                   fit: BoxFit.fill,
-                                  image: new NetworkImage(
-                                      basicUserData()!.photoURL.toString())))),
+                                  image: new NetworkImage((_profilePictureURL !=
+                                          "null")
+                                      ? _profilePictureURL
+                                      : "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png")))),
                       Positioned(
                           child: ClipRRect(
                               borderRadius:
@@ -148,12 +154,6 @@ class _userState extends State<user> {
                             fontWeight: FontWeight.bold, fontSize: 32),
                       ),
                     ),
-                    //TODO: ustawinie CV i wyswietlenie go
-                    // IconButton(
-                    //   onPressed: () => print("Ustawienia"),
-                    //   icon: Icon(CupertinoIcons.gear_solid),
-                    //   iconSize: 28,
-                    // ),
                   ],
                 ),
                 SizedBox(height: 6),
@@ -279,11 +279,11 @@ class _userState extends State<user> {
                     _userData.attributes.length,
                     (int idx) {
                       return Padding(
-                        padding: const EdgeInsets.only(right: 12.0),
+                        padding: const EdgeInsets.only(right: 9.0),
                         child: Chip(
                             labelStyle: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
                             ),
                             elevation: 7,
                             shadowColor:
@@ -326,6 +326,17 @@ class _userState extends State<user> {
                           fontSize: 14,
                         ),
                       ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: Icon(Icons.upload_outlined,
+                          color: Colors.green.shade800),
+                      style: ElevatedButton.styleFrom(
+                        shape: CircleBorder(),
+                        padding: EdgeInsets.all(20),
+                        primary: Colors.greenAccent, // <-- Button color
+                        onPrimary: Colors.green.shade700, // <-- Splash color
+                      ),
                     )
                   ],
                 ),
@@ -342,12 +353,18 @@ class _userState extends State<user> {
                   ),
                 ),
                 SizedBox(
-                  height: 4,
+                  height: 12,
                 ),
                 Center(
                   child: ElevatedButton(
-                    onPressed: () {},
-                    child: Text("Oceń nas", style: TextStyle(fontSize: 18)),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (_) => userToCompanyTransition()),
+                      );
+                    },
+                    child: Text("Zacznij zatrudniać",
+                        style: TextStyle(fontSize: 18)),
                     style: ButtonStyle(
                         animationDuration: Duration(milliseconds: 600),
                         elevation: MaterialStateProperty.all<double?>(7),
@@ -369,84 +386,119 @@ class _userState extends State<user> {
                 SizedBox(
                   height: 16,
                 ),
-                Center(
-                  child: OutlinedButton(
-                    style: ButtonStyle(
-                        minimumSize:
-                            MaterialStateProperty.all<Size?>(Size(128.0, 40.0)),
-                        foregroundColor: MaterialStateProperty.all<Color>(
-                            Colors.black.withOpacity(0.6)),
-                        side: MaterialStateProperty.all<BorderSide>(BorderSide(
-                            width: 1.3, color: Colors.black.withOpacity(0.6))),
-                        shape: MaterialStateProperty
-                            .all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(new Radius.circular(30)),
-                                side: BorderSide(color: Colors.greenAccent)))),
-                    onPressed: () {
-                      debugPrint('Logged out');
-                      FirebaseAuth.instance.signOut();
-                    },
-                    child: Text(
-                      "Wyloguj",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                //Guziki usuwania i wylogowania
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    OutlinedButton(
+                      style: ButtonStyle(
+                          minimumSize: MaterialStateProperty.all<Size?>(
+                              Size(128.0, 40.0)),
+                          foregroundColor: MaterialStateProperty.all<Color>(
+                              Colors.black.withOpacity(0.6)),
+                          side: MaterialStateProperty.all<BorderSide>(
+                              BorderSide(
+                                  width: 1.3,
+                                  color: Colors.black.withOpacity(0.6))),
+                          shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(new Radius.circular(30)),
+                                  side: BorderSide(color: Colors.greenAccent)))),
+                      onPressed: () {
+                        debugPrint('Logged out');
+                        FirebaseAuth.instance.signOut();
+                      },
+                      child: Text(
+                        "Wyloguj",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
                     ),
-                  ),
-                ),
-                //Guzik USUŃ KONTO
-                Center(
-                  child: OutlinedButton(
-                    style: ButtonStyle(
-                        minimumSize:
-                            MaterialStateProperty.all<Size?>(Size(128.0, 40.0)),
-                        foregroundColor:
-                            MaterialStateProperty.all<Color>(Colors.red),
-                        side: MaterialStateProperty.all<BorderSide>(
-                            BorderSide(width: 1.3, color: Colors.red)),
-                        shape: MaterialStateProperty
-                            .all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(new Radius.circular(30)),
-                                side: BorderSide(color: Colors.greenAccent)))),
-                    onPressed: () {
-                      //Add removing intro done flag
-                      basicUserData()?.delete();
-                      debugPrint('Usunięto konto');
-                    },
-                    child: Text(
-                      "Usuń konto",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    OutlinedButton(
+                      style: ButtonStyle(
+                          minimumSize: MaterialStateProperty.all<Size?>(
+                              Size(128.0, 40.0)),
+                          foregroundColor:
+                              MaterialStateProperty.all<Color>(Colors.red),
+                          side: MaterialStateProperty.all<BorderSide>(
+                              BorderSide(width: 1.3, color: Colors.red)),
+                          shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(new Radius.circular(30)),
+                                  side:
+                                      BorderSide(color: Colors.greenAccent)))),
+                      onPressed: () {
+                        //Add removing intro done flag
+                        basicUserData()?.delete();
+                        debugPrint('Usunięto konto');
+                      },
+                      child: Text(
+                        "Usuń konto",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-                Center(
-                  child: OutlinedButton(
-                    style: ButtonStyle(
-                        minimumSize:
-                            MaterialStateProperty.all<Size?>(Size(128.0, 40.0)),
-                        foregroundColor:
-                            MaterialStateProperty.all<Color>(Colors.blueAccent),
-                        side: MaterialStateProperty.all<BorderSide>(
-                            BorderSide(width: 1.3, color: Colors.blueAccent)),
-                        shape: MaterialStateProperty
-                            .all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(new Radius.circular(30)),
-                                side: BorderSide(color: Colors.greenAccent)))),
-                    onPressed: () {
-                      //Add removing intro done flag
-                      showLicensePage(context: context);
-                      debugPrint('Showing licences');
-                    },
-                    child: Text(
-                      "Licencje",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                SizedBox(
+                  height: 16,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: Text("Oceń nas", style: TextStyle(fontSize: 18)),
+                      style: ButtonStyle(
+                          animationDuration: Duration(milliseconds: 600),
+                          elevation: MaterialStateProperty.all<double?>(7),
+                          minimumSize: MaterialStateProperty.all<Size?>(
+                              Size(128.0, 40.0)),
+                          foregroundColor: MaterialStateProperty.all<Color>(
+                              Colors.green.shade700),
+                          shadowColor: MaterialStateProperty.all<Color>(
+                              Colors.green.shade200),
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              Colors.greenAccent),
+                          shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(new Radius.circular(30)),
+                                  side:
+                                      BorderSide(color: Colors.greenAccent)))),
                     ),
-                  ),
-                ),
+                    OutlinedButton(
+                      style: ButtonStyle(
+                          minimumSize: MaterialStateProperty.all<Size?>(
+                              Size(128.0, 40.0)),
+                          foregroundColor: MaterialStateProperty.all<Color>(
+                              Colors.blueAccent),
+                          side: MaterialStateProperty.all<BorderSide>(
+                              BorderSide(width: 1.3, color: Colors.blueAccent)),
+                          shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(new Radius.circular(30)),
+                                  side:
+                                      BorderSide(color: Colors.greenAccent)))),
+                      onPressed: () {
+                        //Add removing intro done flag
+                        showLicensePage(context: context);
+                      },
+                      child: Text(
+                        "Licencje",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                    ),
+                  ],
+                )
               ],
             ),
           ),

@@ -10,6 +10,14 @@ class UserData {
       required this.name,
       required this.phone});
 
+  final String addres;
+  final List<String> attributes;
+  String authId;
+  final String birth;
+  final String city;
+  String name;
+  String phone;
+
   UserData.fromJson(Map<String, Object?> json)
       : this(
           addres: json['addres']! as String,
@@ -20,14 +28,6 @@ class UserData {
           name: json['name']! as String,
           phone: json['phone']! as String,
         );
-
-  final String addres;
-  final List<String> attributes;
-  String authId;
-  final String birth;
-  final String city;
-  String name;
-  String phone;
 
   Map<String, Object?> toJson() {
     return {

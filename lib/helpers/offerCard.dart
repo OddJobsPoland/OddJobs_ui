@@ -3,28 +3,42 @@ import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:jobs_ui/pages/offer.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class NewsCard extends StatelessWidget {
-  NewsCard(
+class OfferCard extends StatelessWidget {
+  OfferCard(
     this.image,
     this.firma,
     this.stanowisko,
     this.typ,
     this.kasa,
+    this.CreatedAt,
+    this.offerDescription,
     this.miasto,
     this.umowa, {
     Key? key,
   }) : super(key: key);
 
-  final String image, firma, stanowisko, typ, kasa, miasto, umowa;
-  final String ago = Jiffy("2022-01-15", "yyyy-MM-dd").fromNow();
+  final Timestamp CreatedAt;
+  final String image,
+      firma,
+      stanowisko,
+      typ,
+      kasa,
+      offerDescription,
+      miasto,
+      umowa;
+  late String ago;
   @override
   Widget build(BuildContext context) {
+    ago = Jiffy(DateTime.parse(CreatedAt.toDate().toString()), "yyyy-MM-dd")
+        .fromNow();
     Jiffy.locale("pl");
     return GestureDetector(
         onTap: () => pushNewScreen(
               context,
-              screen: Offer(image, firma, stanowisko, typ, kasa, miasto, umowa),
+              screen: Offer(image, firma, stanowisko, typ, kasa, CreatedAt,
+                  offerDescription, miasto, umowa),
               withNavBar: true, // OPTIONAL VALUE. True by default.
             ),
         child: Column(
@@ -58,123 +72,88 @@ class NewsCard extends StatelessWidget {
                               letterSpacing: 0.15),
                         ),
                       ),
+                      //Money
+                      SizedBox(
+                        height: 4,
+                      ),
                       Row(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 8,
-                            ),
-                            child: Wrap(
-                              crossAxisAlignment: WrapCrossAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.info_outlined,
-                                  size: 16,
-                                  color: Colors.black.withOpacity(0.5),
-                                ),
-                                SizedBox(
-                                  width: 3,
-                                ),
-                                Container(
-                                  width: 100,
-                                  child: Text(
-                                    typ,
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w400),
-                                  ),
-                                ),
-                              ],
-                            ),
+                          Icon(
+                            CupertinoIcons.money_dollar_circle,
+                            size: 16,
+                            color: Colors.black.withOpacity(0.5),
                           ),
                           SizedBox(
-                            width: 12,
+                            width: 3,
                           ),
-                          Wrap(
-                            alignment: WrapAlignment.spaceEvenly,
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
-                              Icon(
-                                CupertinoIcons.money_dollar_circle,
-                                size: 16,
-                                color: Colors.black.withOpacity(0.5),
-                              ),
-                              SizedBox(
-                                width: 3,
-                              ),
-                              Container(
-                                width: 70,
-                                child: Text(
-                                  kasa,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                              ),
-                            ],
+                          Flexible(
+                            child: Text(
+                              kasa,
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400),
+                            ),
                           ),
                         ],
                       ),
                       SizedBox(
-                        height: 8,
+                        height: 6,
                       ),
+                      //Adress
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Wrap(
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
-                              Icon(
-                                CupertinoIcons.location,
-                                size: 16,
-                                color: Colors.black.withOpacity(0.5),
-                              ),
-                              SizedBox(
-                                width: 3,
-                              ),
-                              Container(
-                                width: 100,
-                                child: Text(
-                                  miasto,
-                                  softWrap: true,
-                                  overflow: TextOverflow.fade,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                              ),
-                            ],
+                          Icon(
+                            CupertinoIcons.location,
+                            size: 16,
+                            color: Colors.black.withOpacity(0.5),
                           ),
-                          Wrap(
-                            alignment: WrapAlignment.spaceEvenly,
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.assignment_outlined,
-                                size: 16,
-                                color: Colors.black.withOpacity(0.5),
-                              ),
-                              SizedBox(
-                                width: 3,
-                              ),
-                              Container(
-                                width: 70,
-                                child: Text(
-                                  umowa,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                              ),
-                            ],
+                          SizedBox(
+                            width: 3,
+                          ),
+                          Flexible(
+                            child: Text(
+                              miasto,
+                              softWrap: true,
+                              overflow: TextOverflow.fade,
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400),
+                            ),
                           ),
                         ],
-                      )
+                      ),
+                      SizedBox(
+                        height: 6,
+                      ),
+                      //Contract
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.assignment_outlined,
+                            size: 16,
+                            color: Colors.black.withOpacity(0.5),
+                          ),
+                          SizedBox(
+                            width: 3,
+                          ),
+                          Flexible(
+                            child: Text(
+                              umowa,
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 )
               ],
             ),
+            const SizedBox(height: 18),
           ],
         ));
   }

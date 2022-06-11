@@ -1,3 +1,4 @@
+import 'package:google_fonts/google_fonts.dart';
 import 'package:jobs_ui/pages/mainIntro.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,8 +18,7 @@ Future<void> main() async {
     title: 'OddJobs',
     themeMode: ThemeMode.light,
     locale: Locale('pl', 'EU'),
-    scrollBehavior: ScrollBehavior(
-        androidOverscrollIndicator: AndroidOverscrollIndicator.stretch),
+    theme: ThemeData(textTheme: GoogleFonts.barlowTextTheme()),
     //debugShowMaterialGrid: true,
     //showPerformanceOverlay: true,
     //checkerboardRasterCacheImages: true,

@@ -77,11 +77,11 @@ class _HomeState extends State<Home> {
               builder: (context, snapshot, _) {
                 if (snapshot.isFetching) {
                   return Center(
-                    child: CircularProgressIndicator(),
+                    child: CircularProgressIndicator(color: Colors.greenAccent),
                   );
                 } else if (snapshot.hasError) {
                   return Center(
-                    child: Text('Błąd'),
+                    child: Text('Błąd serwera'),
                   );
                 } else if (snapshot.docs.isEmpty) {
                   return Center(
@@ -95,9 +95,7 @@ class _HomeState extends State<Home> {
                             !snapshot.isFetchingMore;
 
                         if (hasReachEnd) {
-                          Future.delayed(Duration(milliseconds: 2000), () {
-                            snapshot.fetchMore();
-                          });
+                          snapshot.fetchMore();
                         }
                         final post = snapshot.docs[index].data();
                         return OfferCard(

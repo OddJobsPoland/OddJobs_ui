@@ -8,16 +8,16 @@ import 'package:jobs_ui/helpers/utils.dart';
 import '../helpers/UserData.dart';
 
 // ignore: camel_case_types
-class user extends StatefulWidget {
+class employeer extends StatefulWidget {
   final UserData userData;
-  const user({Key? key, required this.userData}) : super(key: key);
+  const employeer({Key? key, required this.userData}) : super(key: key);
 
   @override
   _userState createState() => _userState();
 }
 
 // ignore: camel_case_types
-class _userState extends State<user> {
+class _userState extends State<employeer> {
   UserData _userData = UserData.emptyUserData();
   String _profilePictureURL = "";
 

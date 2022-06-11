@@ -78,27 +78,21 @@ class OfferCard extends StatelessWidget {
                       ),
                       Row(
                         children: [
-                          Wrap(
-                            alignment: WrapAlignment.spaceEvenly,
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
-                              Icon(
-                                CupertinoIcons.money_dollar_circle,
-                                size: 16,
-                                color: Colors.black.withOpacity(0.5),
-                              ),
-                              SizedBox(
-                                width: 3,
-                              ),
-                              Flexible(
-                                child: Text(
-                                  kasa,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                              ),
-                            ],
+                          Icon(
+                            CupertinoIcons.money_dollar_circle,
+                            size: 16,
+                            color: Colors.black.withOpacity(0.5),
+                          ),
+                          SizedBox(
+                            width: 3,
+                          ),
+                          Flexible(
+                            child: Text(
+                              kasa,
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400),
+                            ),
                           ),
                         ],
                       ),
@@ -133,30 +127,27 @@ class OfferCard extends StatelessWidget {
                         height: 6,
                       ),
                       //Contract
-                      Row(mainAxisSize: MainAxisSize.min, children: [
-                        Wrap(
-                          alignment: WrapAlignment.spaceEvenly,
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.assignment_outlined,
-                              size: 16,
-                              color: Colors.black.withOpacity(0.5),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.assignment_outlined,
+                            size: 16,
+                            color: Colors.black.withOpacity(0.5),
+                          ),
+                          SizedBox(
+                            width: 3,
+                          ),
+                          Flexible(
+                            child: Text(
+                              umowa,
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400),
                             ),
-                            SizedBox(
-                              width: 3,
-                            ),
-                            Flexible(
-                              child: Text(
-                                umowa,
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ])
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 )

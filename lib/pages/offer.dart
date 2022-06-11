@@ -1,9 +1,11 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:jiffy/jiffy.dart';
-// ignore: unused_import
+import 'package:flutter_osm_interface/src/types/geo_point.dart' as GeoPoint;
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class Offer extends StatefulWidget {
@@ -63,13 +65,27 @@ Jeśli masz w sobie dużo pozytywnej energii, kochasz pracę z ludźmi, a
   String applyText = "Aplikuj";
   bool applied = false;
   String saveText = 'Zapisz do ulubionych';
+  bool _savedState = false;
   late String ago;
+
+  MapController controller = MapController(
+    initMapWithUserPosition: false,
+    initPosition: GeoPoint.GeoPoint(latitude: 47.4358055, longitude: 8.4737324),
+    areaLimit: BoundingBox(
+      east: 10.4922941,
+      north: 47.8084648,
+      south: 45.817995,
+      west: 5.9559113,
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     ago = Jiffy(widget.CreatedAt.toDate().toString(), "yyyy-MM-dd").fromNow();
     Jiffy.locale("pl");
     return Scaffold(
         body: SlidingUpPanel(
+      margin: EdgeInsets.fromLTRB(12, 0, 12, 0),
       minHeight: 60,
       panel: Container(
         decoration: BoxDecoration(
@@ -162,11 +178,17 @@ Jeśli masz w sobie dużo pozytywnej energii, kochasz pracę z ludźmi, a
                       color: Colors.greenAccent, // Button color
                       child: InkWell(
                         splashColor: Colors.green[700], // Splash color
-                        onTap: () {},
+                        onTap: () {
+                          setState(() {
+                            _savedState = !_savedState;
+                          });
+                        },
                         child: SizedBox(
                             width: 46,
                             height: 46,
-                            child: Icon(Icons.bookmark_outline)),
+                            child: _savedState
+                                ? Icon(Icons.bookmark_outline)
+                                : Icon(Icons.bookmark)),
                       ),
                     ),
                   ))
@@ -327,6 +349,7 @@ Jeśli masz w sobie dużo pozytywnej energii, kochasz pracę z ludźmi, a
             ),
           ),
           SizedBox(height: 16.0),
+
           Center(
             child: Wrap(
               alignment: WrapAlignment.spaceEvenly,
@@ -382,33 +405,56 @@ Jeśli masz w sobie dużo pozytywnej energii, kochasz pracę z ludźmi, a
                             applied = true;
                             applyText = 'Aplikowano';
                           }),
-                          ScaffoldMessenger.of(context).showMaterialBanner(
-                            MaterialBanner(
-                              padding: EdgeInsets.all(20),
-                              content: Text(
-                                  'Pomyślnie apllikowano! Odpowiedź na aplikację znajdziesz w zakładce czatów'),
-                              leading: Icon(
-                                Icons.celebration_rounded,
-                                size: 32,
-                              ),
-                              elevation: 10,
-                              backgroundColor: Colors.greenAccent,
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () => {
-                                    ScaffoldMessenger.of(context)
-                                        .removeCurrentMaterialBanner()
-                                  },
-                                  child: Text('Zamknij'),
-                                ),
-                              ],
+                          Flushbar(
+                            title: "Sukces!",
+                            titleColor: Colors.white,
+                            message:
+                                "Pomyślnie apllikowano! Odpowiedź na aplikację znajdziesz w zakładce czatów",
+                            flushbarPosition: FlushbarPosition.TOP,
+                            flushbarStyle: FlushbarStyle.FLOATING,
+                            reverseAnimationCurve: Curves.decelerate,
+                            forwardAnimationCurve: Curves.elasticOut,
+                            margin: EdgeInsets.all(8),
+                            borderRadius: BorderRadius.circular(8),
+                            backgroundColor: Colors.red,
+                            boxShadows: [
+                              BoxShadow(
+                                  color: Color.fromARGB(255, 120, 202, 114),
+                                  offset: Offset(0.0, 2.0),
+                                  blurRadius: 3.0)
+                            ],
+                            backgroundGradient: LinearGradient(colors: [
+                              Colors.greenAccent,
+                              Colors.greenAccent
+                            ]),
+                            isDismissible: true,
+                            duration: Duration(seconds: 4),
+                            icon: Icon(
+                              Icons.celebration_rounded,
+                              color: Colors.black,
+                              size: 32,
                             ),
-                          ),
+                            shouldIconPulse: false,
+                            showProgressIndicator: false,
+                            titleText: Text(
+                              "Sukces!",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20.0,
+                                  color: Colors.amber,
+                                  fontFamily: "ShadowsIntoLightTwo"),
+                            ),
+                            messageText: Text(
+                              "Pomyślnie apllikowano! Odpowiedź na aplikację znajdziesz w zakładce czatów",
+                              style: TextStyle(
+                                  fontSize: 18.0, color: Colors.black),
+                            ),
+                          )..show(context),
                         }
                     }),
           ),
           SizedBox(
-            height: 8,
+            height: 32,
           ),
           SizedBox(height: 120.0),
         ],

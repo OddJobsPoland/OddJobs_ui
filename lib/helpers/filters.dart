@@ -39,12 +39,12 @@ class _FiltersState extends State<Filters> {
                   Icon(
                     Icons.leaderboard_rounded,
                     color: Colors.deepPurple[300],
-                    size: 34,
+                    size: 26,
                   ),
                   Text(
                     " Typ pracy",
                     textAlign: TextAlign.left,
-                    style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -115,12 +115,12 @@ class _FiltersState extends State<Filters> {
                   Icon(
                     Icons.school_rounded,
                     color: Colors.teal[300],
-                    size: 34,
+                    size: 26,
                   ),
                   Text(
                     " Wymagane wykształcenie",
                     textAlign: TextAlign.left,
-                    style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -167,12 +167,12 @@ class _FiltersState extends State<Filters> {
                   Icon(
                     Icons.alarm_on_outlined,
                     color: Colors.pink[600],
-                    size: 34,
+                    size: 26,
                   ),
                   Text(
                     " Wymiar godzin",
                     textAlign: TextAlign.left,
-                    style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -219,12 +219,12 @@ class _FiltersState extends State<Filters> {
                   Icon(
                     Icons.cake_rounded,
                     color: Colors.yellow[800],
-                    size: 34,
+                    size: 26,
                   ),
                   Text(
                     " Wynagrodzenie",
                     textAlign: TextAlign.left,
-                    style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),

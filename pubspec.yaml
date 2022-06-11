@@ -47,7 +47,9 @@ dependencies:
   flutter_firebase_chat_core: ^1.5.2
   intl: ^0.17.0
   flutter_slidable: ^1.2.0
-  infinite_scroll_pagination: ^3.1.0
+  flutter_osm_plugin: ^0.34.0+1
+  geopoint: ^1.0.0
+  another_flushbar: ^1.10.29
 
 dev_dependencies:
   flutter_test:

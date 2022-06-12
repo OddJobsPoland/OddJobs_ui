@@ -478,6 +478,7 @@ class _MainIntroState extends State<MainIntro> {
             .set(UserData.persistentUserData)
             .then((value) => print("User Added"))
             .catchError((error) => print("Failed to add user: $error"));
+            
         await _sharedPreferneces!.setBool('IntroDone', false);
         Navigator.of(context).pop();
         Navigator.of(context).push(

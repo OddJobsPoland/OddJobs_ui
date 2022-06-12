@@ -17,3 +17,13 @@ bool UserExistsSync(String? userId) {
 
   return false;
 }
+
+Future<void> setMarkdaownDescriptionInFirestore() async {
+  final userRef = FirebaseFirestore.instance.collection('Offers');
+
+  await userRef
+      .doc("PLpujXljx3kBLABZNSgL")
+      .update({"offerDescription": 'MARKDOWN HERE IN TRIPLE QUOTES'})
+      .then((value) => print("description chnaged"))
+      .catchError((error) => print("Failed to add description: $error"));
+}

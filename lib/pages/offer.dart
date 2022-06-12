@@ -28,40 +28,6 @@ class Offer extends StatefulWidget {
 }
 
 class _OfferState extends State<Offer> {
-  String mk = """
-  # Drogerie natura 🌿
-*to dynamicznie rozwijająca się sieć sklepów drogeryjno - kosmetycznych.* 
-## Obecnie prowadzimy rekrutację na stanowisko: 
-### **KONSULTANT/SPRZEDAWCA** 
-  (mile widziani studenci oraz osoby uczące się)
-                                      
-  **Miejsce pracy:** 🏢
-                                      
-Legnica ul. Piłsudskiego 84(Carrefour)
-                                      
-Jeśli masz w sobie dużo pozytywnej energii, kochasz pracę z ludźmi, a
-                                       branża kosmetyczna to Twoja pasja...dołącz do Nas..czekamy na Ciebie !!!
-                                      
-###  **Co możemy Ci zaoferować:**
-                                      
-* stabilne zatrudnienie, pracę w pełnym wymiarze godzin;
- * elastyczny czas pracy;⌚
-* praktyczny program wdrożenia;👷
- * szkolenia z zakresu kosmetologii i obsługi klienta;👆
- * szkolenia e-learningowe;🧑‍💻
- * stałe wynagrodzenie + premia ;💵
-  * możliwość rozwoju zawodowego i awansu.💰
-                                      
- ### **Ważne dla Nas, żebyś posiadał:**
-                                      
-* Doświadczenie w sprzedaży i w kontakcie z Klientem;💖
-* Uprzejmość oraz zorientowanie na Klienta;👍
-* Otwartość i komunikatywność;🗣️
-* Umiejętność pracy zespołowej;🤼
-* Sumienność i odpowiedzialność;😇
-* Wysoka motywacja wewnętrzna;💪
-* Kreatywność, inicjatywa i zaangażowanie w wykonywanie powierzonych zadań.😎""";
-
   String applyText = "Aplikuj";
   bool applied = false;
   String saveText = 'Zapisz do ulubionych';
@@ -345,7 +311,7 @@ Jeśli masz w sobie dużo pozytywnej energii, kochasz pracę z ludźmi, a
             padding: EdgeInsets.all(16),
             child: MarkdownBody(
               styleSheet: MarkdownStyleSheet(textScaleFactor: 1.15),
-              data: """${widget.offerDescription}""",
+              data: """${widget.offerDescription.trimRight()}""",
             ),
           ),
           SizedBox(height: 16.0),

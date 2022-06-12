@@ -35,6 +35,7 @@ class OfferCard extends StatelessWidget {
         .fromNow();
     Jiffy.locale("pl");
     return GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: () => pushNewScreen(
               context,
               screen: Offer(image, firma, stanowisko, typ, kasa, CreatedAt,

@@ -66,11 +66,11 @@ class _userToCompanyTransitionState extends State<userToCompanyTransition> {
     return IntroductionScreen(
       pages: pages(),
       onDone: () {
-        Navigator.of(context).pushAndRemoveUntil(
+        Navigator.pushReplacement(
+            context,
             MaterialPageRoute<void>(
                 builder: (BuildContext context) =>
-                    employeer(userData: newUser)),
-            (Route<dynamic> route) => false);
+                    employeer(userData: newUser)));
       },
       showNextButton: true,
       next: const Icon(Icons.navigate_next_outlined),

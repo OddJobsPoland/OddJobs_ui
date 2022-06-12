@@ -18,7 +18,14 @@ Future<void> main() async {
     title: 'OddJobs',
     themeMode: ThemeMode.light,
     locale: Locale('pl', 'EU'),
-    theme: ThemeData(textTheme: GoogleFonts.barlowTextTheme()),
+    theme: ThemeData(
+      textTheme: GoogleFonts.barlowTextTheme(),
+      brightness: Brightness.light,
+    ),
+    darkTheme: ThemeData(
+      brightness: Brightness.dark,
+    ),
+
     //debugShowMaterialGrid: true,
     //showPerformanceOverlay: true,
     //checkerboardRasterCacheImages: true,

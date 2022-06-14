@@ -217,44 +217,48 @@ class _userState extends State<employeer> {
                   SizedBox(height: 6),
                   Row(
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Imię",
-                            style: TextStyle(
-                                color: Colors.grey[800],
-                                fontWeight: FontWeight.w500),
-                          ),
-                          Text(
-                            _userData.name.split(" ")[0],
-                            style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w700,
-                                height: 1.2),
-                          ),
-                        ],
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Nazwa wyświetlania",
+                              style: TextStyle(
+                                  color: Colors.grey[800],
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            Text(
+                              "Żabka",
+                              style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w700,
+                                  height: 1.2),
+                            ),
+                          ],
+                        ),
                       ),
                       SizedBox(
                         width: 32,
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Nazwisko",
-                            style: TextStyle(
-                                color: Colors.grey[800],
-                                fontWeight: FontWeight.w500),
-                          ),
-                          Text(
-                            _userData.name.split(" ")[1],
-                            style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w700,
-                                height: 1.2),
-                          ),
-                        ],
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Pełna nazwa",
+                              style: TextStyle(
+                                  color: Colors.grey[800],
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            Text(
+                              "Żabka Polska sp. z o.o.",
+                              style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w700,
+                                  height: 1.2),
+                            ),
+                          ],
+                        ),
                       ),
                       SizedBox(
                         width: 32,
@@ -264,36 +268,46 @@ class _userState extends State<employeer> {
                   SizedBox(
                     height: 12,
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Row(
                     children: [
-                      Text(
-                        "Data urodzenia",
-                        style: TextStyle(
-                            color: Colors.grey[800],
-                            fontWeight: FontWeight.w500),
-                      ),
-                      RichText(
-                        textAlign: TextAlign.start,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 3,
-                        text: TextSpan(
-                          style: const TextStyle(
-                            fontSize: 14.0,
-                            color: Colors.black,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "NIP",
+                            style: TextStyle(
+                                color: Colors.grey[800],
+                                fontWeight: FontWeight.w500),
                           ),
-                          children: <TextSpan>[
-                            TextSpan(
-                                text: _userData.birth,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 17)),
-                            TextSpan(text: '    '),
-                            TextSpan(
-                                text: '${getAge()} lata',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w300, fontSize: 17)),
-                          ],
-                        ),
+                          Text(
+                            "522-30-71-241",
+                            style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w700,
+                                height: 1.2),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        width: 32,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Telefon",
+                            style: TextStyle(
+                                color: Colors.grey[800],
+                                fontWeight: FontWeight.w500),
+                          ),
+                          Text(
+                            "61 856 37 00",
+                            style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w700,
+                                height: 1.2),
+                          )
+                        ],
                       ),
                     ],
                   ),
@@ -306,7 +320,7 @@ class _userState extends State<employeer> {
                         color: Colors.grey[800], fontWeight: FontWeight.w500),
                   ),
                   Text(
-                    "${_userData.city}, ${_userData.addres}",
+                    "Stanisława Matyi 8, 61-586 Poznań",
                     style: TextStyle(
                         fontSize: 17, fontWeight: FontWeight.w700, height: 1.2),
                   ),
@@ -323,7 +337,7 @@ class _userState extends State<employeer> {
                     ),
                   ),
                   SizedBox(
-                    height: 4,
+                    height: 12,
                   ),
                   Container(
                       width: double.infinity,
@@ -356,9 +370,100 @@ class _userState extends State<employeer> {
                           ],
                         ),
                       )),
-                  Wrap(
-                      //children:
+                  SizedBox(
+                    height: 16,
+                  ),
+                  Row(children: [
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Text(
+                            "Wolne ogłoszenia",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18),
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          Text(
+                            "8",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 36,
+                                decoration: TextDecoration.underline),
+                          ),
+                        ],
                       ),
+                    ),
+                    SizedBox(
+                      width: 16,
+                    ),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {},
+                            child: Padding(
+                              padding: const EdgeInsets.all(6.0),
+                              child: Text("Dokup pakiet",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold)),
+                            ),
+                            style: ButtonStyle(
+                                animationDuration: Duration(milliseconds: 600),
+                                elevation:
+                                    MaterialStateProperty.all<double?>(7),
+                                minimumSize: MaterialStateProperty.all<Size?>(
+                                    Size(128.0, 40.0)),
+                                foregroundColor: MaterialStateProperty.all<Color>(
+                                    Colors.green.shade700),
+                                shadowColor: MaterialStateProperty.all<Color>(
+                                    Colors.green.shade200),
+                                backgroundColor: MaterialStateProperty.all<Color>(
+                                    Colors.greenAccent),
+                                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            new Radius.circular(30)),
+                                        side: BorderSide(color: Colors.greenAccent)))),
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          ElevatedButton(
+                            onPressed: () {},
+                            child: Padding(
+                              padding: const EdgeInsets.all(6.0),
+                              child: Text("Rozszerz moliwości konta",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold)),
+                            ),
+                            style: ButtonStyle(
+                                animationDuration: Duration(milliseconds: 600),
+                                elevation:
+                                    MaterialStateProperty.all<double?>(7),
+                                minimumSize: MaterialStateProperty.all<Size?>(
+                                    Size(128.0, 40.0)),
+                                foregroundColor: MaterialStateProperty.all<Color>(
+                                    Colors.green.shade700),
+                                shadowColor: MaterialStateProperty.all<Color>(
+                                    Colors.green.shade200),
+                                backgroundColor: MaterialStateProperty.all<Color>(
+                                    Colors.greenAccent),
+                                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            new Radius.circular(30)),
+                                        side: BorderSide(color: Colors.greenAccent)))),
+                          ),
+                        ],
+                      ),
+                    )
+                  ]),
                   SizedBox(
                     height: 16,
                   ),
@@ -383,69 +488,78 @@ class _userState extends State<employeer> {
                             behavior: HitTestBehavior.opaque,
                             onTap: () => () {},
                             child: Container(
-                              height: 80,
+                                height: 80,
                                 decoration: BoxDecoration(
                                     border: Border.all(
                                       color: Colors.blueAccent,
                                     ),
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(20))),
-                                    child: 
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: Center(
-                                            child: Text(
-                                              "Aktywne rekrutacje",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.blueAccent,
-                                                  fontSize: 18),
-                                            ),
-                                          ),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          "Aktywne rekrutacje",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.blueAccent,
+                                              fontSize: 18),
                                         ),
-                                        Icon(Icons.arrow_forward_ios, color: Colors.blueAccent,),
-                                        SizedBox(width: 8,)
-                                      ],
-                                    )),
+                                      ),
+                                    ),
+                                    Icon(
+                                      Icons.arrow_forward_ios,
+                                      color: Colors.blueAccent,
+                                    ),
+                                    SizedBox(
+                                      width: 8,
+                                    )
+                                  ],
+                                )),
                           ),
                         ),
                         SizedBox(width: 12),
                         Expanded(
                           child: GestureDetector(
-                                behavior: HitTestBehavior.opaque,
-                                onTap: () => () {},
-                                child: Container(
+                              behavior: HitTestBehavior.opaque,
+                              onTap: () => () {},
+                              child: Container(
                                   height: 80,
                                   decoration: BoxDecoration(
                                       border: Border.all(
                                         color: Colors.blueAccent,
                                       ),
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(20))),
-                             
-                                      child: Row(
-                                      children: [
-                                        SizedBox(width: 8,),
-                                        Expanded(
-                                          child: Center(
-                                            child: Text(
-                                              "Nowa rekrutacja",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.blueAccent,
-                                                  fontSize: 18),
-                                            ),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(20))),
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 8,
+                                      ),
+                                      Expanded(
+                                        child: Center(
+                                          child: Text(
+                                            "Nowa rekrutacja",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.blueAccent,
+                                                fontSize: 18),
                                           ),
                                         ),
-                                        Icon(Icons.arrow_forward_ios, color: Colors.blueAccent,),
-                                        SizedBox(width: 8,)
-                                      ],
-                                    ))),
+                                      ),
+                                      Icon(
+                                        Icons.arrow_forward_ios,
+                                        color: Colors.blueAccent,
+                                      ),
+                                      SizedBox(
+                                        width: 8,
+                                      )
+                                    ],
+                                  ))),
                         ),
-                        
                       ]),
                   SizedBox(
                     height: 16,
@@ -473,18 +587,113 @@ class _userState extends State<employeer> {
                   SizedBox(
                     height: 12,
                   ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: Icon(CupertinoIcons.person_badge_plus,
-                        color: Colors.green.shade800),
-                    style: ElevatedButton.styleFrom(
-                      shape: CircleBorder(),
-                      padding: EdgeInsets.all(20),
-                      primary: Colors.greenAccent, // <-- Button color
-                      onPrimary: Colors.green.shade700, // <-- Splash color
-                    ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'Na razie brak dodanych kont podpiętych pod ten profil firmowy.',
+                          style: TextStyle(
+                            color: Colors.black.withOpacity(0.5),
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 18,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {},
+                        child: Icon(CupertinoIcons.person_badge_plus,
+                            color: Colors.green.shade800),
+                        style: ElevatedButton.styleFrom(
+                          shape: CircleBorder(),
+                          padding: EdgeInsets.all(20),
+                          primary: Colors.greenAccent, // <-- Button color
+                          onPrimary: Colors.green.shade700, // <-- Splash color
+                        ),
+                      ),
+                    ],
                   ),
 
+                  SizedBox(
+                    height: 16,
+                  ),
+//PANEL ANALITYCZNY
+                  Row(
+                    children: [
+                      Text(
+                        "Panel analityczny",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22,
+                          color: Colors.grey[800],
+                        ),
+                      ),
+                      SizedBox(
+                        width: 12,
+                      ),
+                      Icon(
+                        Icons.info_outline_rounded,
+                        color: Colors.greenAccent.shade400,
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 12,
+                  ),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    physics: ClampingScrollPhysics(),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        GestureDetector(
+                          child: Container(
+                            color: Colors.lightBlue,
+                            width: 250,
+                            height: 100,
+                            child: Text(
+                              "Trendy zbiorowe ofert",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 16),
+                            ),
+                          ),
+                          onTap: () {},
+                        ),
+                        SizedBox(
+                          width: 12,
+                        ),
+                        GestureDetector(
+                          child: Container(
+                              color: Colors.lightBlue,
+                              width: 250,
+                              height: 100,
+                              child: Text(
+                                "Trendy ofert pojedynczo",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              )),
+                          onTap: () {},
+                        ),
+                        SizedBox(
+                          width: 12,
+                        ),
+                        GestureDetector(
+                          child: Container(
+                            color: Colors.lightBlue,
+                            width: 250,
+                            height: 100,
+                            child: Text(
+                              "Demografia",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 16),
+                            ),
+                          ),
+                          onTap: () {},
+                        ),
+                      ],
+                    ),
+                  ),
                   SizedBox(
                     height: 16,
                   ),

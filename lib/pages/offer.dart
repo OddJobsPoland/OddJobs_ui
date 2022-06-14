@@ -49,6 +49,9 @@ class _OfferState extends State<Offer> {
   Widget build(BuildContext context) {
     ago = Jiffy(widget.CreatedAt.toDate().toString(), "yyyy-MM-dd").fromNow();
     Jiffy.locale("pl");
+
+//TODO : DEEP LINKING SHARE
+
     return Scaffold(
         body: SlidingUpPanel(
       margin: EdgeInsets.fromLTRB(12, 0, 12, 0),

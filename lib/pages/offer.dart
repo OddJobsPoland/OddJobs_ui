@@ -54,7 +54,7 @@ class _OfferState extends State<Offer> {
 
     return Scaffold(
         body: SlidingUpPanel(
-      // margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
       minHeight: 60,
       panel: Container(
         decoration: BoxDecoration(

@@ -34,7 +34,7 @@ dependencies:
   google_sign_in: ^5.2.3
   sliding_up_panel: ^2.0.0+1
   google_fonts: ^2.2.0
-  modal_bottom_sheet: ^2.0.0
+  modal_bottom_sheet: ^2.0.1
   syncfusion_flutter_sliders: ^19.4.43
   jiffy: ^5.0.0
   cloud_firestore: ^3.1.6

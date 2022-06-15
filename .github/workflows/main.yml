@@ -23,7 +23,7 @@ jobs:
         with:
           channel: 'stable'
       - run: flutter --version
-      - run: flutter upgrade
+      - run: flutter downgrade v2.10.5
       - run: flutter pub get
       - run: flutter build apk --debug --split-per-abi
       - run: |

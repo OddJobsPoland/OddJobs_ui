@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "852126047148-bgf7prig0ig2vute0gefl8nu7l5ndeur.apps.googleusercontent.com",
+          "client_id": "852126047148-68efit7ouvsv7ffqn1cqn535vbn4psi2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.jobs_ui",
-            "certificate_hash": "c6cff0cb5395700e53f722c7bf6233da76ce3014"
+            "certificate_hash": "d5e0cf7a58d6fd6723fce42afc7009764b4ffd6b"
           }
         },
         {
@@ -37,6 +37,13 @@
             {
               "client_id": "852126047148-mgv95rk76cl5ir548uqtn2k3fg60e9mv.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "852126047148-tj34e3sb2659u5v1fkl2v2t3v3gqs83c.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.jobsUi"
+              }
             }
           ]
         }

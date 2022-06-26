@@ -3,9 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
+// import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:jiffy/jiffy.dart';
-import 'package:flutter_osm_interface/src/types/geo_point.dart' as GeoPoint;
+// import 'package:flutter_osm_interface/src/types/geo_point.dart' as GeoPoint;
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class Offer extends StatefulWidget {
@@ -34,24 +34,27 @@ class _OfferState extends State<Offer> {
   bool _savedState = false;
   late String ago;
 
-  MapController controller = MapController(
-    initMapWithUserPosition: false,
-    initPosition: GeoPoint.GeoPoint(latitude: 47.4358055, longitude: 8.4737324),
-    areaLimit: BoundingBox(
-      east: 10.4922941,
-      north: 47.8084648,
-      south: 45.817995,
-      west: 5.9559113,
-    ),
-  );
+  // MapController controller = MapController(
+  //   initMapWithUserPosition: false,
+  //   initPosition: GeoPoint.GeoPoint(latitude: 47.4358055, longitude: 8.4737324),
+  //   areaLimit: BoundingBox(
+  //     east: 10.4922941,
+  //     north: 47.8084648,
+  //     south: 45.817995,
+  //     west: 5.9559113,
+  //   ),
+  // );
 
   @override
   Widget build(BuildContext context) {
     ago = Jiffy(widget.CreatedAt.toDate().toString(), "yyyy-MM-dd").fromNow();
     Jiffy.locale("pl");
+
+//TODO : DEEP LINKING SHARE
+
     return Scaffold(
         body: SlidingUpPanel(
-      margin: EdgeInsets.fromLTRB(12, 0, 12, 0),
+      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
       minHeight: 60,
       panel: Container(
         decoration: BoxDecoration(

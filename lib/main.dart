@@ -16,9 +16,16 @@ Future<void> main() async {
   runApp(MaterialApp(
     home: MyApp(),
     title: 'OddJobs',
-    themeMode: ThemeMode.light,
-    locale: Locale('pl', 'EU'),
-    theme: ThemeData(textTheme: GoogleFonts.barlowTextTheme()),
+    //themeMode: ThemeMode.light,
+    locale: Locale('pl', 'PL'),
+    theme: ThemeData(
+      textTheme: GoogleFonts.barlowTextTheme(),
+      brightness: Brightness.light,
+    ),
+    darkTheme: ThemeData(
+      brightness: Brightness.dark,
+    ),
+
     //debugShowMaterialGrid: true,
     //showPerformanceOverlay: true,
     //checkerboardRasterCacheImages: true,

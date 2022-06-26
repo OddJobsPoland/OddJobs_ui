@@ -16,8 +16,8 @@ Future<void> main() async {
   runApp(MaterialApp(
     home: MyApp(),
     title: 'OddJobs',
-    themeMode: ThemeMode.light,
-    locale: Locale('pl', 'EU'),
+    //themeMode: ThemeMode.light,
+    locale: Locale('pl', 'PL'),
     theme: ThemeData(
       textTheme: GoogleFonts.barlowTextTheme(),
       brightness: Brightness.light,

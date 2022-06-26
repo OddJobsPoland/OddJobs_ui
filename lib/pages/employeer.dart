@@ -37,8 +37,8 @@ class _userState extends State<employeer> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
+          body: SingleChildScrollView(
+            child: Column(
           children: [
             Container(
               height: 50,
